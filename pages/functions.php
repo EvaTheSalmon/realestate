@@ -46,4 +46,29 @@ function get_name($con, $fb) {
     return $rows;
 }
 
+function set_man($name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $phonenumb) {
+    $sql = "INSERT IGNORE INTO people (name, surname, `middle-name`, `filial-id`, passport, email, hash, phonenumb) VALUES ('$name', '$surname', '$middlename', '$filialid', '$passport', '$email', '$pass_hash', '$phonenumb')";
+    $query = mysqli_query($con, $sql);
+    return mysqli_affected_rows($query);
+}
+
+function select_id($con, $a) {
+    $sql = "SELECT f.number from filials f";
+    //echo '<br>s=' . $sql;
+    $query = mysqli_query($con, $sql);
+
+    echo"<select name='filial_id'>";
+
+    while ($r = mysqli_fetch_assoc($query)) {
+        $last = $r["$a"];
+        $id = $r["id"];
+        if ($id == $name)
+            $s = 'selected';
+        else {
+            $s = '';
+        }
+        echo "<option value ='$id' $s>$last</option>";
+    }
+    echo '</select>';
+}
 ?>

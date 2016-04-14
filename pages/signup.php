@@ -22,6 +22,7 @@
             <input type="text" name="passport" placeholder="Паспорт" value="" required/>
             <input type="text" name="phonenumb" placeholder="Телефон" value=""/>
             <input type="checkbox" value="Я работник компании"/>
+            <input type="password" name="password" placeholder="Придумайте пароль" value="" required/>
             <input type="submit" name="sign" value="Войти"/>
         </form>
         

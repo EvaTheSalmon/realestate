@@ -2,7 +2,7 @@
 
 include './config.php';
 include './functions.php';
-echo '<br>';
+
 if (isset($_REQUEST['send'])) {
     $name = filter_input(INPUT_POST, 'name');
 

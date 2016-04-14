@@ -41,7 +41,8 @@ print_r($persinf);
         <table class="main_conteiner">            
             <tr>
                 <td><div id="panel1"><a href="pages/login_page.php">Логин</a></div></td>
-                <td><div id="panel2"></div></td>
+                <td><div id="panel2"><a href="pages/signup.php">Регистрация</a></div></td>
+            <a href="pages/signup.php"></a>
                 <td><div id="panel3"></div></td>
             </tr>
         </table>        
