@@ -2,8 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Недвижимость</title>
-        <link rel="stylesheet" href="css/normalize.css">
+        <title>Недвижимость</title>        
         <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
         <style>
             html{background-color: #4f4f4f;}

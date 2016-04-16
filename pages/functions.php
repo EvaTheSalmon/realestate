@@ -3,6 +3,7 @@
 function let_login($con, $parm, $name) {
     //parm - поле по которому выбираем, тип того, что ввёл юзверь
     $sql = "SELECT p.hash FROM people p WHERE p.$parm='$name'";
+    echo $sql;
     $query = mysqli_query($con, $sql);
     $r = mysqli_fetch_row($query);
     if ($r != 0) {
@@ -52,23 +53,32 @@ function set_man($name, $surname, $middlename, $filialid, $passport, $email, $pa
     return mysqli_affected_rows($query);
 }
 
-function select_id($con, $a) {
-    $sql = "SELECT f.number from filials f";
+function select_fil($con) {
+    if (isset($_REQUEST["filialid"]))
+        $name = $_REQUEST["filialid"];
+    else {
+        $name = '0';
+    }
+    $sql = "SELECT f.phone from filials f";
     //echo '<br>s=' . $sql;
     $query = mysqli_query($con, $sql);
-
-    echo"<select name='filial_id'>";
-
+    echo  "<select name='filialid'>";
     while ($r = mysqli_fetch_assoc($query)) {
-        $last = $r["$a"];
-        $id = $r["id"];
-        if ($id == $name)
+        if ($r["phone"] == $name)
             $s = 'selected';
         else {
             $s = '';
         }
-        echo "<option value ='$id' $s>$last</option>";
+        echo "<option value =" . $r["phone"] . " $s>" . $r["phone"] . "</option>";
     }
     echo '</select>';
 }
+
+function select_id_fil($con, $da) {
+    $sql = "SELECT f.id from filials f WHERE f.phone='".$da."'";
+    $query = mysqli_query($con, $sql);
+    $r = mysqli_fetch_row($query);
+    return $r[0];
+}
+
 ?>
