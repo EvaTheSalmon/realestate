@@ -1,5 +1,6 @@
 <?php
 
+
 function let_login($con, $parm, $name) {
     //parm - поле по которому выбираем, тип того, что ввёл юзверь
     $sql = "SELECT p.hash FROM people p WHERE p.$parm='$name'";
@@ -50,7 +51,7 @@ function get_name($con, $fb) {
 function set_man($name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $phonenumb) {
     $sql = "INSERT IGNORE INTO people (name, surname, `middle-name`, `filial-id`, passport, email, hash, phonenumb) VALUES ('$name', '$surname', '$middlename', '$filialid', '$passport', '$email', '$pass_hash', '$phonenumb')";
     $query = mysqli_query($con, $sql);
-    return mysqli_affected_rows($query);
+    echo mysqli_affected_rows($query);
 }
 
 function select_fil($con) {
@@ -59,17 +60,17 @@ function select_fil($con) {
     else {
         $name = '0';
     }
-    $sql = "SELECT f.phone from filials f";
+    $sql = "SELECT f.number from filials f";
     //echo '<br>s=' . $sql;
     $query = mysqli_query($con, $sql);
     echo  "<select name='filialid'>";
     while ($r = mysqli_fetch_assoc($query)) {
-        if ($r["phone"] == $name)
+        if ($r["number"] == $name)
             $s = 'selected';
         else {
             $s = '';
         }
-        echo "<option value =" . $r["phone"] . " $s>" . $r["phone"] . "</option>";
+        echo "<option value =" . $r["number"] . " $s>" . $r["number"] . "</option>";
     }
     echo '</select>';
 }

@@ -10,7 +10,7 @@ if (!$con) {
     echo '<br>The base has been droped' . mysql_error($con);
     exit();
 } else {
-    //echo 'Connected';
+    echo 'Connected';
 }
 mysqli_query($con, "SET NAMES 'utf8'");
 ?>

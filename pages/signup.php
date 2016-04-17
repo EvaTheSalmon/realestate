@@ -1,6 +1,7 @@
 <?php
-include './config.php';
+include_once './config.php';
 include './functions.php';
+include './signup_code.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@ include './functions.php';
             html{background-color: #4f4f4f;}
 
             input[type=checkbox] + label {
-                visibility: hidden;
+                visibility: hidden;                
             } 
             input[type=checkbox]:checked + label {
 
@@ -34,7 +35,7 @@ include './functions.php';
             <input type="text" name="passport" placeholder="Паспорт" value="" required/>
             <input type="text" name="phonenumb" placeholder="Телефон" value=""/>
             <input type="checkbox" value="Я работник компании" id="ch" name="ch"/>
-            <label for='ch'><?php select_fil($con) ?></label>            
+            <label for='ch'><?php select_fil($con) ?></label>             
             <input type="password" name="password" class='list' id='list' placeholder="Придумайте пароль" value="" required/>
             <input type="submit" name="sign" value="Войти" />
         </form>
