@@ -1,7 +1,6 @@
 <?php
 include_once './config.php';
 include './functions.php';
-include './signup_code.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,18 +27,19 @@ include './signup_code.php';
 
     <body>   
         <form action="signup.php" method="post">
-            <input type="text" name="name" placeholder="Имя" value="" required/>
-            <input type="text" name="surname" placeholder="Фамилия" value="" required/>
-            <input type="text" name="middle-name" placeholder="Отчество" value=""/>
-            <input type="email" name="email" placeholder="Email" value="" required/>
-            <input type="text" name="passport" placeholder="Паспорт" value="" required/>
-            <input type="text" name="phonenumb" placeholder="Телефон" value=""/>
-            <input type="checkbox" value="Я работник компании" id="ch" name="ch"/>
-            <label for='ch'><?php select_fil($con) ?></label>             
-            <input type="password" name="password" class='list' id='list' placeholder="Придумайте пароль" value="" required/>
-            <input type="submit" name="sign" value="Войти" />
-        </form>
-
+            <input type="text" name="name" placeholder="Имя" value="" required/><br/>
+            <input type="text" name="surname" placeholder="Фамилия" value="" required/><br/>
+            <input type="text" name="middle-name" placeholder="Отчество" value=""/><br/>
+            <input type="text" name="email" placeholder="Email" value="" required/><br/>
+            <input type="text" name="passport" placeholder="Паспорт" value=""/><br/>
+            <input type="text" name="phonenumb" placeholder="Телефон" value=""/><br/>
+            <input type="checkbox" id="ch" name="ch"/>
+            <label for='ch'><?php select_fil($con) ?></label><br/>
+            <input type="password" name="password" class='list' id='list' placeholder="Придумайте пароль" value="" required/><br/>
+            <input type="password" name="password_ch" class='list' id='list' placeholder="Повторите пароль" value="" required/><br/>
+            <input type="submit" name="sign" value="Войти" /><br>            
+        </form>     
+        <?php include './signup_code.php'; ?>
     </body>
 </html>
 

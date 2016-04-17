@@ -48,10 +48,10 @@ function get_name($con, $fb) {
     return $rows;
 }
 
-function set_man($name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $phonenumb) {
+function set_man($con, $name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $phonenumb) {
     $sql = "INSERT IGNORE INTO people (name, surname, `middle-name`, `filial-id`, passport, email, hash, phonenumb) VALUES ('$name', '$surname', '$middlename', '$filialid', '$passport', '$email', '$pass_hash', '$phonenumb')";
     $query = mysqli_query($con, $sql);
-    echo mysqli_affected_rows($query);
+    echo '+';
 }
 
 function select_fil($con) {
@@ -76,7 +76,7 @@ function select_fil($con) {
 }
 
 function select_id_fil($con, $da) {
-    $sql = "SELECT f.id from filials f WHERE f.phone='".$da."'";
+    $sql = "SELECT f.id from filials f WHERE f.number='".$da."'";
     $query = mysqli_query($con, $sql);
     $r = mysqli_fetch_row($query);
     return $r[0];

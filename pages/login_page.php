@@ -14,8 +14,8 @@
     </script>
     <body>   
         <form action="login_page.php" method="post">
-            <input type="text" name="name" placeholder="Ваше имя" value="jftf@b-d-un.com"/>
-            <input type="password" name="pass" placeholder="Ваш пароль" value="1"/>
+            <input type="text" name="name" placeholder="Ваше имя" />
+            <input type="password" name="pass" placeholder="Ваш пароль" />
             <input type="submit" name="send" value="Войти"/>
         </form>
         
