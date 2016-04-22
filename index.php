@@ -2,7 +2,6 @@
 //session_start();
 //$persinf[] = $_SESSION['persinf'];
 //print_r($persinf);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,9 +40,12 @@
             <tr>
                 <td><div id="panel1"><a href="pages/login_page.php">Логин</a></div></td>
                 <td><div id="panel2"><a href="pages/signup.php">Регистрация</a></div></td>
-            <a href="pages/signup.php"></a>
-                <td><div id="panel3"></div></td>
+                <td><div id="panel3"><a href="pages/personal_cabinet.php">Кабинет</a></div></td>
+                <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
+                <td><div id="panel4"><a href="pages/gogle.php">Vtcnj</a></div></td>
             </tr>
+
         </table>        
+        
     </body>
 </html>

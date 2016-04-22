@@ -1,6 +1,5 @@
 <?php
 
-
 function let_login($con, $parm, $name) {
     //parm - поле по которому выбираем, тип того, что ввёл юзверь
     $sql = "SELECT p.hash FROM people p WHERE p.$parm='$name'";
@@ -63,7 +62,7 @@ function select_fil($con) {
     $sql = "SELECT f.number from filials f";
     //echo '<br>s=' . $sql;
     $query = mysqli_query($con, $sql);
-    echo  "<select name='filialid'>";
+    echo "<select name='filialid'>";
     while ($r = mysqli_fetch_assoc($query)) {
         if ($r["number"] == $name)
             $s = 'selected';
@@ -76,10 +75,42 @@ function select_fil($con) {
 }
 
 function select_id_fil($con, $da) {
-    $sql = "SELECT f.id from filials f WHERE f.number='".$da."'";
+    $sql = "SELECT f.id from filials f WHERE f.number='" . $da . "'";
     $query = mysqli_query($con, $sql);
     $r = mysqli_fetch_row($query);
     return $r[0];
 }
+
+function imageresize($src, $dest, $width, $height, $quality) {
+    $info = getimagesize($src);
+    $mime = $info['mime'];
+    switch ($mime) {
+        case 'image/jpeg':
+            $im = imagecreatefromjpeg($src);
+            $im1 = imagecreatetruecolor($width, $height);
+            imagecopyresampled($im1, $im, 0, 0, 0, 0, $width, $height, imagesx($im), imagesy($im));
+            imagejpeg($im1, $dest, $quality);
+            imagedestroy($im);
+            imagedestroy($im1);
+            break;
+        case 'image/png':
+            $im = imagecreatefrompng($src);
+            $im1 = imagecreatetruecolor($width, $height);
+            imagecopyresampled($im1, $im, 0, 0, 0, 0, $width, $height, imagesx($im), imagesy($im));
+            imagepng($im1, $dest, $quality);
+            imagedestroy($im);
+            imagedestroy($im1);
+            break;
+        case 'image/gif':
+            $im = imagecreatefromgif($src);
+            $im1 = imagecreatetruecolor($width, $height);
+            imagecopyresampled($im1, $im, 0, 0, 0, 0, $width, $height, imagesx($im), imagesy($im));
+            imagegif($im1, $dest, $quality);
+            imagedestroy($im);
+            imagedestroy($im1);
+            break;
+    }
+}
+
 
 ?>
