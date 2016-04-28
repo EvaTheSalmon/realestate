@@ -42,7 +42,7 @@
                 <td><div id="panel2"><a href="pages/signup.php">Регистрация</a></div></td>
                 <td><div id="panel3"><a href="pages/personal_cabinet.php">Кабинет</a></div></td>
                 <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
-                <td><div id="panel4"><a href="pages/goods.php">Мемы</a></div></td>
+                <td><div id="panel4"><a href="pages/goods_new.php">Мемы</a></div></td>
             </tr>
 
         </table>        

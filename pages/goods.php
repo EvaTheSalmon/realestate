@@ -1,77 +1,56 @@
 <?php
+
 include_once './config.php';
 include_once './functions.php';
 include_once './goods_code.php';
-?>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Недвижимость</title>        
-        <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
-        <style>
-            html{background-color: #4f4f4f;}
-            .back{margin-left: 15%; margin-right: 15%; min-width: 700px; height: max-content; background: red;}
-            .mappa{height: 150px; width: 100%; top: 5px; left: 5px;}
-        </style>
-    </head>    
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <script type="text/javascript">
-        window.jQuery || document.write("<script type=\"text/javascript\" src=\"js/jquery-2.2.2.min.js\"><\/script>");
-    </script>    
-    <body>   
-        <div class="back">
-            <?php
-            $n=$i+5;
-            while ($i<$n) {
-            $obj = loadgoodsinf($con, $i);
-            try{
-                $filename = '../resources/'.$i.'.jpg';
-                
-                    if(!file_exists($filename)){
-                        throw new Exception('noImg');
-            }} 
-            catch (Exception $exc){
-                $filename = '../resources/domik.jpg';
-            }            
-            ?>
-            <table>
-                <tr>
-                    <td>
-                        <p style = "caption"><?php echo $obj['title'] ?></p><br/>
-                        <p class="description"><?php echo $obj['description'] ?></p>
-                    </td>
-                    <td><img src='<?php echo $filename ?>' height='240' width='320'></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <form action="goods.php" method="post">
-                            <input type="submit" name="buy" value="Цена вопроса <?php echo $obj['cost'] ?>">
-                        </form>
-                    </td>
-                </tr>                     
-                <tr>
-                    <td>
-                        <div id="map<?php //echo $i; ?>" class="mappa"></div>
-                    </td>
-                    <td><input type="text" value="<?php echo loadgoodsadr($con, $i) ?>" id="address<?php //echo $i; ?>"></td>
-                </tr>
-            </table>
-            <?php } ?>
-            <!---------------------------------------------------------------------------->
-            <script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
-            <script src="map.js">            
-            </script>
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKJy5rIOT0ALJP6x7Ks32fm7gMTyDylcE&callback=initMap">
-            </script>
-            <!---------------------------------------------------------------------------->
+$limit = 5;
+////----------------
+//try {
+//    $filename = '../resources/' . $mass[$i]['id'] . '.jpg';
+//    if (!file_exists($filename)) {
+//        throw new Exception('noImg');
+//    }
+//} catch (Exception $exc) {
+//    $filename = '../resources/domik.jpg';
+//}
+////-----------------
 
-        </div>
-        <form action="goods.php">
-            <?php if ($i-5>0) {?>
-            <input type="submit" name="back" value="Назад"/>
-            <?php } ?>
-            <input type="submit" name="next" value="Далее"/>            
-        </form>
-    </body>
-</html>
+if (empty($_GET['page']) or isset($page) < 0) {
+    $page = 0;
+} else {
+    $page = $_GET['page'];
+}
+$total = itemcount($con);
+if ($page > $total)
+    $page = $total;
+
+$sql = "SELECT * FROM object o limit " . $page * $limit . ", $limit";
+$query = mysqli_query($con, $sql);
+$mass = mysqli_fetch_assoc($query);
+
+while ($mass = mysqli_fetch_assoc($query)) {
+    echo "<strong>" . $mass['title'] . "</strong><p>" . $mass['description'] . "</p>";
+}
+
+$sql_n = "SELECT COUNT(*) FROM object o";
+$query_n = mysqli_query($con, $sql_n);
+$m = mysqli_fetch_row($query_n);
+
+$numpages = ceil($m[0] / $limit);
+$test = "RealEstate/pages";
+if ($numpages > 1) {
+    if ($page != 0) {
+        echo "<a href=\"/$test/goods.php?page=0\">Первая</a> ";
+    }
+    for ($i = 0; $i < $numpages; $i++) {
+        if ($page != $i) {
+            echo "<a href=\"/$test/goods.php?page=" . $i . "\">" . ($i + 1) . "</a> ";
+        } else {
+            echo "<strong><a href=\"/$test/goods.php?page=" . $i . "\">" . ($i + 1) . "</a></strong> ";
+        }
+    }
+    if ($page != ($numpages - 1)) {
+        echo "<a href=\"/$test/goods.php?page=" . ($numpages - 1) . "\">Последняя</a>";
+    }
+}
+?>
