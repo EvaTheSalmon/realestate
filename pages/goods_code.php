@@ -31,7 +31,7 @@ if (isset($_REQUEST['fir'])) {
     if (!isset($_SESSION)) {
         session_start();
     }
-    $_SESSION['cur_pos']=0;
+    $_SESSION['cur_pos'] = 0;
 }
 
 function itemcount($con) {
@@ -39,12 +39,6 @@ function itemcount($con) {
     $query = mysqli_query($con, $sql);
     $m = mysqli_fetch_row($query);
     return $m[0];
-}
-
-function dropitems($con, $pos, $limit) {
-    
-    return($mass);
-    
 }
 
 ?>
