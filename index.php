@@ -1,7 +1,5 @@
 <?php
-//session_start();
-//$persinf[] = $_SESSION['persinf'];
-//print_r($persinf);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,8 +36,8 @@
 
         <table class="main_conteiner">            
             <tr>
-                <td><div id="panel1"><a href="pages/login_page.php">Логин</a></div></td>
-                <td><div id="panel2"><a href="pages/signup.php">Регистрация</a></div></td>
+                <td><div id="panel1"><a href="pages/login.php">Логин</a></div></td>
+                <td><div id="panel2"><a href="pages/signup_code.php">Регистрация</a></div></td>
                 <td><div id="panel3"><a href="pages/personal_cabinet.php">Кабинет</a></div></td>
                 <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
                 
