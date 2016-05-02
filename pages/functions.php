@@ -119,16 +119,13 @@ function get_user_emhas($con, $hash) {
     return $val[0];
 }
 
-function islogin($info, $con) {
-    
+function islogin($info, $con) {    
     if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
         $info = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $email = mysqli_real_escape_string($con, $info['em']);
         $pass = mysqli_real_escape_string($con, $info['pa']);
-        $ip = mysqli_real_escape_string($con, $info['ip']);
-        
-        $sql = "SELECT p.email_hash from people p WHERE p.pass_hash = '" . $pass . "'";
-        
+        $ip = mysqli_real_escape_string($con, $info['ip']);        
+        $sql = "SELECT p.email_hash from people p WHERE p.pass_hash = '" . $pass . "'";        
         $query = mysqli_query($con, $sql);
         $email_ch = mysqli_fetch_row($query);
         if ($email_ch[0] == $email and $ip == hash('sha256', $_SERVER['REMOTE_ADDR'])) {
@@ -174,5 +171,6 @@ function itemcount($con) {
     $m = mysqli_fetch_row($query);
     return $m[0];
 }
+
 
 ?>
