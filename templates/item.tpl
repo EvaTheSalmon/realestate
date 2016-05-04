@@ -31,7 +31,7 @@
                         <!-- сюда отзывы-->
                     </td>
                     <td>
-                        <a href="">Купить за <?php echo $price ?></a>
+                        <a href="">Купить за <?php echo $cost ?></a>
                     </td>
                 </tr>
             </table>            

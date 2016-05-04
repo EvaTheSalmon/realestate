@@ -119,13 +119,13 @@ function get_user_emhas($con, $hash) {
     return $val[0];
 }
 
-function islogin($info, $con) {    
+function islogin($info, $con) {
     if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
         $info = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $email = mysqli_real_escape_string($con, $info['em']);
         $pass = mysqli_real_escape_string($con, $info['pa']);
-        $ip = mysqli_real_escape_string($con, $info['ip']);        
-        $sql = "SELECT p.email_hash from people p WHERE p.pass_hash = '" . $pass . "'";        
+        $ip = mysqli_real_escape_string($con, $info['ip']);
+        $sql = "SELECT p.email_hash from people p WHERE p.pass_hash = '" . $pass . "'";
         $query = mysqli_query($con, $sql);
         $email_ch = mysqli_fetch_row($query);
         if ($email_ch[0] == $email and $ip == hash('sha256', $_SERVER['REMOTE_ADDR'])) {
@@ -151,7 +151,7 @@ function getownername($con, $number) {
 }
 
 function loadgoodsinf($con, $i) {
-    $sql = "SELECT * FROM object o WHERE o.id='$i'";
+    $sql = "SELECT * FROM object o WHERE o.number='$i'";
     $query = mysqli_query($con, $sql);
     $obj[] = mysqli_fetch_assoc($query);
     return $obj[0];
@@ -165,12 +165,39 @@ function loadgoodsadr($con, $i) {
     return $adr;
 }
 
-function itemcount($con) {
+function getobjectcount($con) {
     $sql = "SELECT COUNT(*) FROM object o";
     $query = mysqli_query($con, $sql);
     $m = mysqli_fetch_row($query);
     return $m[0];
 }
 
+function loadimages($number) {
+    try {
+        $filename = '../resources/' . $number . '.jpg';
+        if (!file_exists($filename)) {
+            throw new Exception('noImg');
+        }
+    } catch (Exception $exc) {
+        $filename = '../resources/domik.jpg';
+    }
+    return $filename;
+}
+
+function loadnescojects($con, $page, $limit) {
+    $sql = "SELECT * FROM object o limit " . $page * $limit . ", $limit";
+    $query = mysqli_query($con, $sql);
+    $mass = mysqli_fetch_assoc($query);
+    return $mass;
+}
+
+function getaddress($con, $number) {
+    $sql = "SELECT o.house, d.name AS 'District', s.name as 'Town', s1.name AS 'Street' FROM object o JOIN district d ON o.`district-id` = d.id
+JOIN settling s ON o.`settling-id` = s.id JOIN street s1 ON o.`street-id` = s1.id WHERE o.number=" . $number;
+    $query = mysqli_query($con, $sql);
+    $mass = mysqli_fetch_assoc($query);
+    $address = 'Улица ' . $mass['Street'] . ' ' . $mass['house'] . ' ' . $mass['District'] . ' район, ' . $mass['Town'];
+    return $address;
+}
 
 ?>

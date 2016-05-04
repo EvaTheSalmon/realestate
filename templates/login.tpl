@@ -1,5 +1,5 @@
 <?php
-if (isset($_COOKIE['log'])){print_r(unserialize($_COOKIE['log']));}
+
 ?>
 <html>
     <head>
