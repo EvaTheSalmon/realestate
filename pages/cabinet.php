@@ -1,13 +1,12 @@
 <?php
 
-include_once './config.php';
 include_once './functions.php';
 
-$persinf = checklogin($con);
+$persinf = checklogin();
 
 switch ($persinf) {
     case $persinf !== '':
-        //print_r(get_name($con, $fb));
+        //print_r(get_name($fb));
         $name = $persinf[0]['name'];
         $surname = $persinf[0]['surname'];
         $id = $persinf[0]['id'];        
@@ -19,7 +18,7 @@ switch ($persinf) {
 
         if (isset($_REQUEST['save'])) {
             $limit = $_REQUEST['number'];
-            savesettings($con, $limit, $id);
+            savesettings($limit, $id);
         }
         print_r($persinf);
         include '../templates/cabinet.tpl';

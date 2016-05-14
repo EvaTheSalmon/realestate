@@ -1,8 +1,8 @@
 <?php
 
-include_once './config.php';
-include_once './functions.php';
 
+include_once './functions.php';
+$con = config();
 if (isset($_REQUEST['sign'])) {
 
 
@@ -23,7 +23,7 @@ if (isset($_REQUEST['sign'])) {
 
         $passport = filter_input(INPUT_POST, 'passport');
         if (isset($passport)) {
-            if (strlen($passport) !== 10 or ! is_int($passport)) {
+            if (strlen($passport) !== 10) {
                 throw new Exception('Формат паспорта неверен');
             }
         }
@@ -47,7 +47,7 @@ if (isset($_REQUEST['sign'])) {
         //Получем данные о том, работник клиент, или нет
         if (isset($_REQUEST['ch'])) {
             $da = filter_input(INPUT_POST, 'filialid');
-            $filialid = select_id_fil($con, $da);
+            $filialid = select_id_fil($da);
         } else {
             $filialid = 0;
         }
@@ -61,7 +61,7 @@ if (isset($_REQUEST['sign'])) {
         
         $email_hash = hash('sha256', trim($email));
         
-        set_man($con, $name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $email_hash, $phonenumb);
+        set_man($name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $email_hash, $phonenumb);
     } catch (Exception $exc) {
         echo 'Ошибка данных: ';
         

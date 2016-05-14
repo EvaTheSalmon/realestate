@@ -1,14 +1,13 @@
 <?php
 
-include_once './config.php';
 include_once './functions.php';
-
+$con = config();
 if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
     $cook = filter_input(INPUT_COOKIE, 'log');
-    if (islogin($cook, $con) == true) {
+    if (islogin($cook) == true) {
         $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $fb = $mass['pa'];
-        $_SESSION['persinf'] = get_name($con, $fb);
+        $_SESSION['persinf'] = get_name($fb);
     }
 } else {
     echo 'Вы уже вошли';
@@ -20,24 +19,24 @@ if (!isset($_SESSION['persinf'])) {
         //экранируем name   
         if (is_email($name)) {
             //определяем почта ли, для поиска        
-            $fb = let_login($con, 'email', $name);
+            $fb = let_login('email', $name);
             //echo 'email';
             //----------------------------------------------
         } elseif (strlen($name) == 10) {
             //определяем паспорт ли        
-            $fb = let_login($con, 'passport', $name);
+            $fb = let_login('passport', $name);
             //echo 'pass';
             //----------------------------------------------
         } elseif (strlen($name) == 11 and substr($name, 0, 1) == 8) {
             //номер в записи с 8        
-            $fb = let_login($con, 'phonenumb', $name);
+            $fb = let_login('phonenumb', $name);
             //echo 'numb 8 ';
             //----------------------------------------------
         } elseif (substr($name, 0, 2) == "+7" and strlen($name) == 12) {
             $name = substr($name, 2);
             $name = '8' . $name;
             //номер в записи с +7              
-            $fb = let_login($con, 'phonenumb', $name);
+            $fb = let_login('phonenumb', $name);
             //echo 'numb +7';
             //----------------------------------------------
         } else {
@@ -52,9 +51,9 @@ if (!isset($_SESSION['persinf'])) {
             if ($fb == $pass_hash) {
                 session_start();
                 //Передаём массив с данными в сессию. Массив двумерный             
-                $_SESSION['persinf'] = get_name($con, $fb);
+                $_SESSION['persinf'] = get_name($fb);
                 //для куков-------------------------
-                $info['em'] = get_user_emhas($con, $pass_hash);
+                $info['em'] = get_user_emhas($pass_hash);
                 $info['pa'] = $pass_hash;
                 $info['ip'] = hash('sha256', $_SERVER['REMOTE_ADDR']);
                 $value = serialize($info);

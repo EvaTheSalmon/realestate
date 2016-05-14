@@ -12,18 +12,12 @@
     </head> 
     <body>
         <table class="main_conteiner" style="border: black dotted">
-            
-            <tr>
-                <td class = "capt">
-                    <a href=\"http://localhost/realestate-master/pages/item.php?numb="<?php  echo $mass['number']?>"><?php echo $mass['title']?></a>
-                </td>
-                <td class="timg">
-                    <img src="<?php echo $filename ?>" class="image"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <?php echo $mass['description']?>
-                </td>
-            </tr>
+            <?php foreach ($items as $value) {
+            echo $value;
+            } ?>
         </table>
+        <?php foreach ($links as $value) {
+        echo $value;
+        } ?>
+    </body>
+</html>
