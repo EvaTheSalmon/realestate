@@ -58,8 +58,10 @@ if (isset($_REQUEST['sign'])) {
         if ($passport == "") {
             $passport = 0;
         }
-
-        set_man($con, $name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $phonenumb);
+        
+        $email_hash = hash('sha256', trim($email));
+        
+        set_man($con, $name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $email_hash, $phonenumb);
     } catch (Exception $exc) {
         echo 'Ошибка данных: ';
         

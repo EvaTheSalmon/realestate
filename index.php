@@ -27,10 +27,10 @@
             }            
         </style>
     </head>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<!--    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script type="text/javascript">
         window.jQuery || document.write("<script type=\"text/javascript\" src=\"js/jquery-2.2.2.min.js\"><\/script>");
-    </script>
+    </script>-->
     <body>
         <!--<header><img src="resources/logo.png" width="120pt" height="120pt"></header>-->
 
@@ -39,6 +39,7 @@
                 <td><div id="panel1"><a href="pages/login.php">Логин</a></div></td>
                 <td><div id="panel2"><a href="pages/signup.php">Регистрация</a></div></td>
                 <td><div id="panel3"><a href="pages/cabinet.php">Кабинет</a></div></td>
+                <td><div id="panel4"><a href="pages/goods_1.php">Товары</a></div></td>
                 <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
                 
             </tr>

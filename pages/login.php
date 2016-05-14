@@ -10,9 +10,11 @@ if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
         $fb = $mass['pa'];
         $_SESSION['persinf'] = get_name($con, $fb);
     }
+} else {
+    echo 'Вы уже вошли';
 }
 if (!isset($_SESSION['persinf'])) {
-    
+
     if (isset($_REQUEST['send'])) {
         $name = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'name'));
         //экранируем name   

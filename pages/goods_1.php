@@ -22,8 +22,8 @@
             $limit = 5;
         }
         //Экранируем нестандартные значения страницы
-        (int)$page = filter_input(INPUT_GET, 'page');
-        if ($page < 0) {            
+        (int) $page = filter_input(INPUT_GET, 'page');
+        if ($page < 0) {
             $path = basename(__FILE__) . '?page=0';
             echo $path;
             header('Location: ' . $path);
@@ -40,28 +40,29 @@
         $squery = mysqli_query($con, "SELECT * FROM object o where o.sold=0 limit " . $page * $limit . ", $limit");
         $mass = loadnescojects($con, $page, $limit);
         ?>
-        <table class="main_conteiner" style="border: black dotted">
+        <table class="main_conteiner" style="border: black dotted; width: 100%">
             <?php
+            $array = array();
             while ($mass = mysqli_fetch_assoc($squery)) {
                 //----------------Подгрузка картинок
                 $filename = loadimages($mass['number']);
-                ?>
-                <tr>
-                    <td class = "capt">
-                        <a href="item.php?numb=<?php echo $mass['number'] ?>"><?php echo $mass['title'] ?></a>
+                $text = "<tr><td class = \"capt\"><a href=\"item.php?numb=".$mass['number']."\">".$mass['title']."</a>
                     </td>
-                    <td class="timg">
-                        <img src="<?php echo $filename ?>" class="image" alt="<?php echo $mass['title'] ?>"/>
+                    <td class=\"timg\">
+                        <img src=\"".$filename."\" class=\"image\" alt=\"".$mass['title']."\"/>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <?php echo $mass['description'] ?>
-                    </td>
-                </tr>
-                <?php
+                    <td colspan=\"2\">".$mass['description']."</td>
+                </tr>";
+                array_push($array, $text);
+            }
+            //print_r($array);
+            foreach ($array as $value) {
+                echo $value;
             }
             ?>
+
         </table>
         <?php
         if ($numpages > 1) {

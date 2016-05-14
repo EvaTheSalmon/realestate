@@ -47,8 +47,8 @@ function get_name($con, $fb) {
     return $rows;
 }
 
-function set_man($con, $name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $phonenumb) {
-    $sql = "INSERT IGNORE INTO people (name, surname, `middle-name`, `filial-id`, passport, email, pass_hash, phonenumb) VALUES ('$name', '$surname', '$middlename', '$filialid', '$passport', '$email', '$pass_hash', '$phonenumb')";
+function set_man($con, $name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $email_hash, $phonenumb) {
+    $sql = "INSERT IGNORE INTO people (name, surname, `middle-name`, `filial-id`, passport, email, pass_hash, email_hash phonenumb) VALUES ('$name', '$surname', '$middlename', '$filialid', '$passport', '$email', '$pass_hash', '$email_hash', '$phonenumb')";
     $query = mysqli_query($con, $sql);
     echo '+';
 }
@@ -198,6 +198,51 @@ JOIN settling s ON o.`settling-id` = s.id JOIN street s1 ON o.`street-id` = s1.i
     $mass = mysqli_fetch_assoc($query);
     $address = 'Улица ' . $mass['Street'] . ' ' . $mass['house'] . ' ' . $mass['District'] . ' район, ' . $mass['Town'];
     return $address;
+}
+
+function savesettings($con, $limit, $id) {
+    $sql = "update people p SET p.`limit` = $limit WHERE p.id = $id";
+    $query = mysqli_query($con, $sql);
+}
+
+function issold($con, $number) {
+    $sql = "SELECT o.sold from object o WHERE o.number = " . $number;
+    $query = mysqli_query($con, $sql);
+    $m = mysqli_fetch_row($query);
+    //echo $sql;
+    return $m[0];
+}
+
+//function setbuy($con, $number, $id) {
+//    $sql = "INSERT IGNORE INTO `bin` (`client-id`, `object-id`) VALUES ($id, $number)";
+//    $query = mysqli_query($con, $sql);   
+//}
+
+function checklogin($con) {
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+    $cook = filter_input(INPUT_COOKIE, 'log');
+    if (islogin($cook, $con) == true) {
+        $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
+        $fb = $mass['pa'];
+        $_SESSION['persinf'] = get_name($con, $fb);
+    }
+    if (isset($_SESSION['persinf'])) {
+        $persinf[] = $_SESSION['persinf'];
+    }
+    if (isset($persinf)) {
+        return $persinf;
+    } else {
+        return 0;
+    }
+}
+
+function selectitnotsold($con) {
+    $sql = "SELECT o.number FROM object o WHERE o.sold = 0 ORDER BY o.number ASC LIMIT 1";
+    $query = mysqli_query($con, $sql);
+    $m = mysqli_fetch_row($query);
+    return $m[0];
 }
 
 ?>

@@ -1,3 +1,5 @@
+<?php print_r($_SESSION['bin']); ?>
+<!Doctype html>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -31,7 +33,10 @@
                         <!-- сюда отзывы-->
                     </td>
                     <td>
-                        <a href="">Купить за <?php echo $cost ?></a>
+                        <form action="../pages/buy.php" method="post">                        
+                            <input type="submit" value="Купить за <?php echo $cost ?>" name="buy">
+                        </form>
+                        <!--<a href="<?php basename(__FILE__) . '?numb=' . $number. '&&' ?>">Купить за <?php echo $cost ?></a>-->
                     </td>
                 </tr>
             </table>            
