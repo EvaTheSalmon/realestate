@@ -1,6 +1,5 @@
 <?php
 
-
 include_once './functions.php';
 //Подгрузка количества элементов на странице из базы, если есть
 if (isset($_SESSION['persinf'])) {
@@ -12,12 +11,12 @@ if (isset($_SESSION['persinf'])) {
 //Экранируем нестандартные значения страницы
 (int) $page = filter_input(INPUT_GET, 'page');
 if ($page < 0) {
-    $path = basename(__FILE__) . '?page=0';
-    echo $path;
+    $path = basename(__FILE__) . '?page=0';    
     header('Location: ' . $path);
 } else {
     $page = filter_input(INPUT_GET, 'page');
 }
+
 $numpages = ceil(getobjectcount() / $limit);
 if ($page > $numpages) {
     $page = $numpages;
@@ -45,7 +44,7 @@ while ($mass = mysqli_fetch_assoc($squery)) {
                     <td colspan=\"2\">" . $mass['description'] . "</td>
                 </tr>";
 
-    array_push($items, $text);
+    $items[] = $text;
 }
 //print_r($array);
 
@@ -69,7 +68,7 @@ if ($numpages > 1) {
     }
     if ($page != ($numpages - 1)) {
         $last = "<a href=\"" . basename(__FILE__) . "?page=" . ($numpages - 1) . "\">Последняя</a>";
-        array_push($links, $last);
+        $links[] = $last;
     }
 }
 include '../templates/goods.tpl';

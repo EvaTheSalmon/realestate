@@ -12,12 +12,8 @@
     </head> 
     <body>
         <table class="main_conteiner" style="border: black dotted">
-            <?php foreach ($items as $value) {
-            echo $value;
-            } ?>
+            <?php echo implode('', $items);?>
         </table>
-        <?php foreach ($links as $value) {
-        echo $value;
-        } ?>
-    </body>
+        <?php echo implode('', $links);?>
+    </body>   
 </html>

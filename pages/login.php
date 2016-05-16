@@ -8,6 +8,8 @@ if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
         $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $fb = $mass['pa'];
         $_SESSION['persinf'] = get_name($fb);
+        $bin = array();
+        $_SESSION['bin'] = $bin;
     }
 } else {
     echo 'Вы уже вошли';
@@ -15,6 +17,7 @@ if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
 if (!isset($_SESSION['persinf'])) {
 
     if (isset($_REQUEST['send'])) {
+        echo 'memem';
         $name = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'name'));
         //экранируем name   
         if (is_email($name)) {
@@ -42,6 +45,7 @@ if (!isset($_SESSION['persinf'])) {
         } else {
             echo '<br>Вы ввели неверные данные';
         }
+
         //----------------------------------------------
         //Далее код входа на сайт, сравнение хэша.
         if (isset($fb) and $fb != 'end') {
@@ -52,12 +56,15 @@ if (!isset($_SESSION['persinf'])) {
                 session_start();
                 //Передаём массив с данными в сессию. Массив двумерный             
                 $_SESSION['persinf'] = get_name($fb);
+                //Создаём пользовательскую корзину
+                $bin = array();
+                $_SESSION['bin'] = $bin;
                 //для куков-------------------------
                 $info['em'] = get_user_emhas($pass_hash);
                 $info['pa'] = $pass_hash;
                 $info['ip'] = hash('sha256', $_SERVER['REMOTE_ADDR']);
                 $value = serialize($info);
-                setcookie('log', $value, time() + 60 * 60 * 24 * 7);
+                setcookie('log', $value);
                 header('location: login.php');
                 //----------------------------------
                 echo '<br>Данные переданы';

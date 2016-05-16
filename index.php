@@ -1,7 +1,5 @@
 <?php
-include './pages/functions.php';
-$con = config();
-print_r($con);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,7 +40,7 @@ print_r($con);
                 <td><div id="panel2"><a href="pages/signup.php">Регистрация</a></div></td>
                 <td><div id="panel3"><a href="pages/cabinet.php">Кабинет</a></div></td>                
                 <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
-                
+                <td><div id="panel4"><a href="pages/order.php">Корзина</a></div></td>
             </tr>
 
         </table>        

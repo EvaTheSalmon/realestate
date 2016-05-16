@@ -9,7 +9,7 @@ switch ($persinf) {
         //print_r(get_name($fb));
         $name = $persinf[0]['name'];
         $surname = $persinf[0]['surname'];
-        $id = $persinf[0]['id'];        
+        $id = $persinf[0]['id'];
         if (isset($_REQUEST['number']) && $_REQUEST['number'] != '') {
             $limit_bs = $_REQUEST['number'];
         } else {
@@ -22,7 +22,7 @@ switch ($persinf) {
         }
         print_r($persinf);
         include '../templates/cabinet.tpl';
-        
+
         break;
     default:
         header("Location: login.php");

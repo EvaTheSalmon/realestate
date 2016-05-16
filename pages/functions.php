@@ -14,7 +14,6 @@ function config() {
             mysqli_query($con, "SET NAMES 'utf8'");
             return $con;
         }
-        
     } catch (Exception $exc) {
         echo 'Ошибка: ', $exc->getMessage(), '\n';
         die();
@@ -84,13 +83,11 @@ function get_name($fb) {
     $sql = "select * from people p where p.pass_hash='$fb'";
     $query = mysqli_query($con, $sql);
     $rows = mysqli_fetch_assoc($query);
-
     //--------------------------------
     if (isset($con)) {
         mysqli_close($con);
     }
     //--------------------------------
-
     return $rows;
 }
 
@@ -267,7 +264,7 @@ function loadgoodsadr($i) {
 
 function getobjectcount() {
     $con = config();
-    $sql = "SELECT COUNT(*) FROM object o";
+    $sql = "SELECT COUNT(*) FROM object o where o.sold = 0";
     $query = mysqli_query($con, $sql);
     $m = mysqli_fetch_row($query);
     //--------------------------------
@@ -299,7 +296,7 @@ function loadimages($number) {
 function loadnescojects($page, $limit) {
     $con = config();
     $sql = "SELECT * FROM object o limit " . $page * $limit . ", $limit";
-    echo $sql;
+    //echo $sql;
     $query = mysqli_query($con, $sql);
     $mass = mysqli_fetch_assoc($query);
     //--------------------------------
@@ -364,7 +361,7 @@ function checklogin() {
     if (islogin($cook, $con) == true) {
         $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $fb = $mass['pa'];
-        $_SESSION['persinf'] = get_name($con, $fb);
+        $_SESSION['persinf'] = get_name($fb);
     }
     if (isset($_SESSION['persinf'])) {
         $persinf[] = $_SESSION['persinf'];
@@ -394,4 +391,152 @@ function selectitnotsold() {
     return $m[0];
 }
 
+function buy() {
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+    $number = $_SESSION['item_number'];
+    $persinf = checklogin();
+    if (!$persinf == 0) {
+        if (isset($_REQUEST['buy'])) {
+            //Проверка на наличие данного элемента в корзине
+            $bin = $_SESSION['bin'];
+            if (!in_array($number, $bin)) {
+                $bin[] = $number;
+                $_SESSION['bin'] = $bin;
+                //print_r($_SESSION['bin']);
+            } else {
+                return 'alr';
+            }
+        }
+    } else {
+        header("Location: login.php");
+    }
+}
+
+function selectobject($number) {
+    $con = config();
+    $sql = "SELECT * FROM object o WHERE o.number = " . $number;
+    $query = mysqli_query($con, $sql);
+    $m = mysqli_fetch_assoc($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //--------------------------------
+    return $m;
+}
+
+function send_mime_mail(
+$name_from, // имя отправителя
+        $email_from, // email отправителя
+        $name_to, // имя получателя
+        $email_to, // email получателя
+        $data_charset, // кодировка переданных данных
+        $send_charset, // кодировка письма
+        $subject, // тема письма
+        $body, // текст письма
+        $html = true // письмо в виде html или обычного текста
+//(Plain не даёт форматировать текст)
+) {
+    $to = mime_header_encode($name_to, $data_charset, $send_charset)
+            . ' <' . $email_to . '>';
+    $subject = mime_header_encode($subject, $data_charset, $send_charset);
+    $from = mime_header_encode($name_from, $data_charset, $send_charset)
+            . ' <' . $email_from . '>';
+    if ($data_charset != $send_charset) {
+        $body = iconv($data_charset, $send_charset, $body);
+    }
+    $headers = "From: $from\r\n";
+    $type = ($html) ? 'html' : 'plain';
+    $headers .= "Content-type: text/$type; charset=$send_charset\r\n";
+    $headers .= "Mime-Version: 1.0\r\n";
+    return mail($to, $subject, $body, $headers);
+}
+
+function mime_header_encode($str, $data_charset, $send_charset) {
+    if ($data_charset != $send_charset) {
+        $str = iconv($data_charset, $send_charset, $str);
+    }
+    return '=?' . $send_charset . '?B?' . base64_encode($str) . '?=';
+}
+
+function setitemsbuy($custnumb, $number) {
+    $con = config();
+    $sql = "UPDATE object o SET o.sold=1, o.customer = $custnumb WHERE o.number = $number";
+    $query = mysqli_query($con, $sql);
+    echo $sql;
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //--------------------------------    
+}
+
+function getbuynescinf($id) {
+    $con = config();
+    $sql = "SELECT p.name,p.surname,p.phonenumb, f.id AS 'FilNumb', f.`graph-work` as 'Grapho' from people p JOIN object o ON p.id = o.`agent-id` JOIN filials f ON p.`filial-id`= f.id WHERE o.number = $id";
+    //echo $sql;
+    $query = mysqli_query($con, $sql);
+    $mass[] = mysqli_fetch_assoc($query);
+    return $mass[0];
+}
+
+function loadaddressfil($i) {
+    $con = config();
+    $sql = "SELECT f.house, s.name as 'street', d.name AS 'dist', s1.name AS 'city'
+  from people p 
+  JOIN filials f ON p.id = f.id
+  JOIN street s ON f.`street-id` = s.id
+  JOIN district d ON f.`district-id` = d.id
+  JOIN settling s1 ON f.`settling-id` = s1.id  
+  WHERE f.id = " . $i;
+    //echo $sql;
+    $query = mysqli_query($con, $sql);
+    $ad[] = mysqli_fetch_assoc($query);
+    (string) $adr = $ad[0]['street'] . ' улица, дом ' . $ad[0]['house'] . ' ' . $ad[0]['dist'] . ', город ' . $ad[0]['city'];
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //--------------------------------
+    return $adr;
+}
+
+function loadreview($obj) {
+    $con = config();
+    $sql = "SELECT p.`name` as 'name', r.`text` as 'text', r.date FROM reviews r JOIN people p ON p.id = r.author WHERE r.object = " . $obj;    
+    $query = mysqli_query($con, $sql);
+    $mass[] = mysqli_fetch_assoc($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //--------------------------------
+    return $mass;
+}
+
+function sendreview($text, $auth, $obj) {
+    $con = config();    
+    $sql = "INSERT IGNORE INTO reviews (author, text, object, date) VALUES ('$auth', '$text', '$obj', NOW())";
+    echo $sql;
+    $query = mysqli_query($con, $sql);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //--------------------------------    
+}
+function countreviews() {
+    $con = config();    
+    $sql = "select count(*) from reviews";
+    $query = mysqli_query($con, $sql);
+    $r = mysqli_fetch_row($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];
+}
 ?>

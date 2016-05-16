@@ -1,4 +1,3 @@
-<?php print_r($_SESSION['bin']); ?>
 <!Doctype html>
 <html>
     <head>
@@ -30,15 +29,19 @@
                 </tr>                     
                 <tr>
                     <td>
-                        <!-- сюда отзывы-->
+                        <form method="post">
+                         <?php echo $loggin; ?>   
+                        <br/>
+                        <?php if($isloggin==1 and $reviews !== null){ echo implode('<br>', $reviews);} ?>
                     </td>
-                    <td>
-                        <form action="../pages/buy.php" method="post">                        
+                    <td>                        
+                        
                             <input type="submit" value="Купить за <?php echo $cost ?>" name="buy">
                         </form>
                         <!--<a href="<?php basename(__FILE__) . '?numb=' . $number. '&&' ?>">Купить за <?php echo $cost ?></a>-->
                     </td>
                 </tr>
+                
             </table>            
         </div>
         <!-------------------------------------->
