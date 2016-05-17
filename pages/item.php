@@ -8,12 +8,10 @@ if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
         $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $fb = $mass['pa'];
         $_SESSION['persinf'] = get_name($fb);
-        $bin = array();
-        $_SESSION['bin'] = $bin;
         $isloggin = 1;
     }
 }
-
+//print_r($_SESSION['bin']);
 $con = config();
 
 (int) $number = filter_input(INPUT_GET, 'numb');
@@ -53,20 +51,19 @@ if (issold($number) == 0) {
     $filename = loadimages($inf['number']);
 
     $sql = "SELECT p.`name` as 'name', r.`text` as 'text', r.date FROM reviews r JOIN people p ON p.id = r.author WHERE r.object = " . $inf['number'];
-    echo $sql;
+    //echo $sql;
     $con = config();
     $query = mysqli_query($con, $sql);
-    
+
     $mass = loadreview($inf['number']);
-    
+
     while ($mass = mysqli_fetch_assoc($query)) {
-        $reviews[] = $mass['name'].' говорит: '. $mass['text'].' ('.$mass['date'].')';
-    }
-    
-    if ($reviews == null) {
-        $loggin = "Отзывов нет";
+        $reviews[] = $mass['name'] . ' говорит: ' . $mass['text'] . ' (' . $mass['date'] . ')';
     }
 
+    if (empty($mass)) {
+        $reviews[1] = "Отзывов нет";
+    }
 
     if (isset($_REQUEST['buy'])) {
         $rez = buy();
@@ -81,8 +78,21 @@ if (issold($number) == 0) {
         $persinf = $_SESSION['persinf'];
         $loggin = "<input type='text' name='review'/><input type='submit' name='write' value='Отправить'/>";
         if (isset($_REQUEST['write'])) {
-            $review_r = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'review'));
-            sendreview($review_r, $persinf['id'], $inf['number']);
+            //Здесь живёт гугловская капча----
+            $grr = $_POST['g-recaptcha-response'];
+            $secret = '6LfRKiATAAAAAH609Lw326E2c2i3c2VunZdSRkC3';
+            require_once "recaptchalib.php";
+            $response = null;
+            $reCaptcha = new ReCaptcha($secret);
+            $response = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
+            //--------------------------------
+            if (( $response != null && $response->success)) {
+                $review_r = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'review'));
+                sendreview($review_r, $persinf['id'], $inf['number']);
+                header('Location: ' . __FILE__ . '?number=' . $number);
+            } else {
+        echo '<script language="javascript">alert("Проверьте капчу");</script>';
+    }
         }
     } else {
         $loggin = 'Необходимо войти или зарегистрироваться чтобы оставлять отзывы';

@@ -94,7 +94,7 @@ function get_name($fb) {
 function set_man($name, $surname, $middlename, $filialid, $passport, $email, $pass_hash, $email_hash, $phonenumb) {
     $con = config();
     $sql = "INSERT IGNORE INTO people (`name`, surname, `middle-name`, `filial-id`, passport, email, pass_hash, email_hash, phonenumb) VALUES ('$name', '$surname', '$middlename', '$filialid', '$passport', '$email', '$pass_hash', '$email_hash', '$phonenumb')";
-    echo $sql;
+    //echo $sql;
     $query = mysqli_query($con, $sql);
     //--------------------------------
     if (isset($con)) {
@@ -397,17 +397,21 @@ function buy() {
     }
     $number = $_SESSION['item_number'];
     $persinf = checklogin();
-    if (!$persinf == 0) {
-        if (isset($_REQUEST['buy'])) {
-            //Проверка на наличие данного элемента в корзине
-            $bin = $_SESSION['bin'];
-            if (!in_array($number, $bin)) {
+    if ($persinf !== 0) {
+        //Проверка на наличие данного элемента в корзине        
+
+        $bin = $_SESSION['bin'];
+        if (is_array($bin) == 1) {
+            if (in_array($number, $bin) == 0) {
                 $bin[] = $number;
                 $_SESSION['bin'] = $bin;
                 //print_r($_SESSION['bin']);
             } else {
                 return 'alr';
             }
+        } else {
+            $bina[] = $number;
+            $_SESSION['bin'] = $bina;
         }
     } else {
         header("Location: login.php");
@@ -465,7 +469,7 @@ function setitemsbuy($custnumb, $number) {
     $con = config();
     $sql = "UPDATE object o SET o.sold=1, o.customer = $custnumb WHERE o.number = $number";
     $query = mysqli_query($con, $sql);
-    echo $sql;
+    //echo $sql;
     //--------------------------------
     if (isset($con)) {
         mysqli_close($con);
@@ -505,7 +509,7 @@ function loadaddressfil($i) {
 
 function loadreview($obj) {
     $con = config();
-    $sql = "SELECT p.`name` as 'name', r.`text` as 'text', r.date FROM reviews r JOIN people p ON p.id = r.author WHERE r.object = " . $obj;    
+    $sql = "SELECT p.`name` as 'name', r.`text` as 'text', r.date FROM reviews r JOIN people p ON p.id = r.author WHERE r.object = " . $obj;
     $query = mysqli_query($con, $sql);
     $mass[] = mysqli_fetch_assoc($query);
     //--------------------------------
@@ -517,9 +521,9 @@ function loadreview($obj) {
 }
 
 function sendreview($text, $auth, $obj) {
-    $con = config();    
+    $con = config();
     $sql = "INSERT IGNORE INTO reviews (author, text, object, date) VALUES ('$auth', '$text', '$obj', NOW())";
-    echo $sql;
+    //echo $sql;
     $query = mysqli_query($con, $sql);
     //--------------------------------
     if (isset($con)) {
@@ -527,8 +531,9 @@ function sendreview($text, $auth, $obj) {
     }
     //--------------------------------    
 }
+
 function countreviews() {
-    $con = config();    
+    $con = config();
     $sql = "select count(*) from reviews";
     $query = mysqli_query($con, $sql);
     $r = mysqli_fetch_row($query);
@@ -539,4 +544,5 @@ function countreviews() {
     //-------------------------------- 
     return $r[0];
 }
+
 ?>

@@ -2,18 +2,21 @@
 
 include_once './functions.php';
 $con = config();
-if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
-    $cook = filter_input(INPUT_COOKIE, 'log');
-    if (islogin($cook) == true) {
-        $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
-        $fb = $mass['pa'];
-        $_SESSION['persinf'] = get_name($fb);
-        $bin = array();
-        $_SESSION['bin'] = $bin;
+if (empty($_SESSION['persinf']) == 1) {
+    if ((filter_input(INPUT_COOKIE, 'log')) !== '') {
+        $cook = filter_input(INPUT_COOKIE, 'log');
+        if (islogin($cook) == true) {
+            $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
+            $fb = $mass['pa'];
+            $_SESSION['persinf'] = get_name($fb);
+            $bin = array();
+            $_SESSION['bin'] = $bin;
+        }
     }
 } else {
     echo 'Вы уже вошли';
 }
+
 if (!isset($_SESSION['persinf'])) {
 
     if (isset($_REQUEST['send'])) {
@@ -57,7 +60,7 @@ if (!isset($_SESSION['persinf'])) {
                 //Передаём массив с данными в сессию. Массив двумерный             
                 $_SESSION['persinf'] = get_name($fb);
                 //Создаём пользовательскую корзину
-                $bin = array();
+                $bin = 0;
                 $_SESSION['bin'] = $bin;
                 //для куков-------------------------
                 $info['em'] = get_user_emhas($pass_hash);

@@ -28,8 +28,10 @@
             <label for='ch'><?php select_fil($con); ?></label><br/>
             <input type="password" name="password" class='list' id='list' placeholder="Придумайте пароль" value="" required/><br/>
             <input type="password" name="password_ch" class='list' id='list' placeholder="Повторите пароль" value="" required/><br/>
+            <div class="g-recaptcha" data-sitekey="6LfRKiATAAAAAB3UKUtUx0GlcvLIEgZES-1SNpCC"></div>
             <input type="submit" name="sign" value="Войти" /><br>            
-        </form>             
+        </form>   
+        <script src='https://www.google.com/recaptcha/api.js'></script>
     </body>
 </html>
 
