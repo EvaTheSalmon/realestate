@@ -545,4 +545,139 @@ function countreviews() {
     return $r[0];
 }
 
+function insertstreet($name) {
+    $con = config();
+    $sql = "INSERT INTO street (name) VALUE ('$name')";
+    $query = mysqli_query($con, $sql);
+    $sql_ret = "SELECT s.id from street s WHERE s.name = '$name'";
+    $query_ret = mysqli_query($con, $sql_ret);
+    $r = mysqli_fetch_row($query_ret);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];
+}
+
+function insertdistrict($name) {
+    $con = config();
+    $sql = "INSERT INTO district (name) VALUE ('$name')";
+    $query = mysqli_query($con, $sql);
+    $sql_ret = "SELECT d.id from district d WHERE d.name = '$name'";
+    $query_ret = mysqli_query($con, $sql_ret);
+    $r = mysqli_fetch_row($query_ret);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];
+}
+
+function insertsettling($name, $typeids) {
+    $con = config();
+    $sql = "INSERT INTO settling (name, `settlement-type-id`) VALUE ('$name', '$typeids')";
+    $query = mysqli_query($con, $sql);
+    //echo $sql;
+    $sql_ret = "SELECT s.id from settling s WHERE s.name = '$name'";        
+    $query_ret = mysqli_query($con, $sql_ret);
+    $r = mysqli_fetch_row($query_ret);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];
+}
+
+function set_object($agentid, $sellerid, $title, $cost, $number, $roomcount, $typeid, $description, $house, $street, $district, $settling) {
+    $con = config();
+    $sql = "INSERT IGNORE INTO object (`agent-id`, `seller-id`, `title`, `cost`, `number`, `room-count`, `type-id`, `offer-date`, description, 
+  house, `street-id`, `district-id`, `settling-id`) VALUES ('$agentid', '$sellerid', '$title', '$cost', '$number', '$roomcount', 
+      '$typeid', NOW(), '$description', '$house', '$street', '$district', '$settling')";
+    //echo $sql;
+    $query = mysqli_query($con, $sql);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+}
+
+function lastmaxnumb() {
+    $con = config();
+    $sql = "SELECT o.number from object o ORDER BY o.number DESC LIMIT 1";
+    $query = mysqli_query($con, $sql);
+    $r = mysqli_fetch_row($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];
+}
+
+function select_type() {
+    $con = config();
+    //Для сохранения значений при обновлении страницы
+    if (isset($_REQUEST["typeid"]))
+        $name = $_REQUEST["typeid"];
+    else {
+        $name = '0';
+    }
+    $sql = "SELECT t.id, t.name from type t";   
+    $query = mysqli_query($con, $sql);
+    echo "<select name='typeid'>";
+    while ($r = mysqli_fetch_assoc($query)) {
+        if ($r["name"] == $name)
+            $s = 'selected';
+        else {
+            $s = '';
+        }
+        echo "<option value =" . $r["id"] . " $s>" . $r["name"] . "</option>";
+    }
+    echo '</select>';
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+}
+
+function selectrandagent(){
+    $con = config();
+    $sql = "SELECT DISTINCT p.id FROM people p WHERE p.`filial-id`<>0 ORDER BY RAND() LIMIT 1";
+    $query = mysqli_query($con, $sql);
+    $r = mysqli_fetch_row($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];    
+}
+
+function select_types() {
+    $con = config();
+    //Для сохранения значений при обновлении страницы
+    if (isset($_REQUEST["typeids"]))
+        $name = $_REQUEST["typeids"];
+    else {
+        $name = '0';
+    }
+    $sql = "SELECT s.id, s.name from `settlement-type` s";   
+    $query = mysqli_query($con, $sql);
+    echo "<select name='typeids'>";
+    while ($r = mysqli_fetch_assoc($query)) {
+        if ($r["name"] == $name)
+            $s = 'selected';
+        else {
+            $s = '';
+        }
+        echo "<option value =" . $r["id"] . " $s>" . $r["name"] . "</option>";
+    }
+    echo '</select>';
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+}
 ?>
