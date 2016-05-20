@@ -21,7 +21,7 @@ if ($persinf !== '') {
     }
     $con = config();
     if (isset($_REQUEST['add'])) {
-        try {
+        
             $name = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'name'));
             $description = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'description'));
             $price = filter_input(INPUT_POST, 'price');
@@ -47,10 +47,11 @@ if ($persinf !== '') {
             $sellerid = $persinf[0]['id'];
             $agentid = selectrandagent();
             
-            set_object($agentid, $sellerid, $name, $price, $number, $roomcount, $typeid, $description, $housenumb, $street_id, $district_id, $settling_id);
-        } catch (Exception $exc) {
-            
-        }
+            $r = set_object($agentid, $sellerid, $name, $price, $number, $roomcount, $typeid, $description, $housenumb, $street_id, $district_id, $settling_id);
+            if ($r!==1){
+                echo '<script language="javascript">alert("Произошла ошибка, проверьте данные");</script>';
+            }
+        
     }
 
 

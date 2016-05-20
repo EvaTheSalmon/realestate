@@ -43,7 +43,9 @@ session_start();
                 <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
                 <td><div id="panel4"><a href="pages/order.php">Корзина</a></div></td>
             </tr>
-
+            <tr>
+                
+            </tr>
         </table>        
         
     </body>

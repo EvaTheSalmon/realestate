@@ -4,7 +4,14 @@
         <meta charset="UTF-8">
         <title>Недвижимость</title>        
         <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
-        <style>            
+        <style>  
+            input[type=checkbox] + label {
+                visibility: hidden;                
+            } 
+            input[type=checkbox]:checked + label {
+
+                visibility: visible;
+            }
         </style>        
     </head>
     <body>

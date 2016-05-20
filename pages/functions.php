@@ -580,7 +580,7 @@ function insertsettling($name, $typeids) {
     $sql = "INSERT INTO settling (name, `settlement-type-id`) VALUE ('$name', '$typeids')";
     $query = mysqli_query($con, $sql);
     //echo $sql;
-    $sql_ret = "SELECT s.id from settling s WHERE s.name = '$name'";        
+    $sql_ret = "SELECT s.id from settling s WHERE s.name = '$name'";
     $query_ret = mysqli_query($con, $sql_ret);
     $r = mysqli_fetch_row($query_ret);
     //--------------------------------
@@ -593,16 +593,18 @@ function insertsettling($name, $typeids) {
 
 function set_object($agentid, $sellerid, $title, $cost, $number, $roomcount, $typeid, $description, $house, $street, $district, $settling) {
     $con = config();
-    $sql = "INSERT IGNORE INTO object (`agent-id`, `seller-id`, `title`, `cost`, `number`, `room-count`, `type-id`, `offer-date`, description, 
+    $sql = "INSERT INTO object (`agent-id`, `seller-id`, `title`, `cost`, `number`, `room-count`, `type-id`, `offer-date`, description, 
   house, `street-id`, `district-id`, `settling-id`) VALUES ('$agentid', '$sellerid', '$title', '$cost', '$number', '$roomcount', 
       '$typeid', NOW(), '$description', '$house', '$street', '$district', '$settling')";
     //echo $sql;
     $query = mysqli_query($con, $sql);
+    $r = mysqli_affected_rows($query);
     //--------------------------------
     if (isset($con)) {
         mysqli_close($con);
     }
     //-------------------------------- 
+    return $r[0];
 }
 
 function lastmaxnumb() {
@@ -626,7 +628,7 @@ function select_type() {
     else {
         $name = '0';
     }
-    $sql = "SELECT t.id, t.name from type t";   
+    $sql = "SELECT t.id, t.name from type t";
     $query = mysqli_query($con, $sql);
     echo "<select name='typeid'>";
     while ($r = mysqli_fetch_assoc($query)) {
@@ -643,7 +645,7 @@ function select_type() {
     }
 }
 
-function selectrandagent(){
+function selectrandagent() {
     $con = config();
     $sql = "SELECT DISTINCT p.id FROM people p WHERE p.`filial-id`<>0 ORDER BY RAND() LIMIT 1";
     $query = mysqli_query($con, $sql);
@@ -653,7 +655,7 @@ function selectrandagent(){
         mysqli_close($con);
     }
     //-------------------------------- 
-    return $r[0];    
+    return $r[0];
 }
 
 function select_types() {
@@ -664,7 +666,7 @@ function select_types() {
     else {
         $name = '0';
     }
-    $sql = "SELECT s.id, s.name from `settlement-type` s";   
+    $sql = "SELECT s.id, s.name from `settlement-type` s";
     $query = mysqli_query($con, $sql);
     echo "<select name='typeids'>";
     while ($r = mysqli_fetch_assoc($query)) {
@@ -679,5 +681,68 @@ function select_types() {
     if (isset($con)) {
         mysqli_close($con);
     }
+}
+
+function searchitems($name, $pricefrom, $pricebefor, $roomcount, $street, $district, $settling, $house, $page, $limit) {
+    $con = config();    
+    if (($name)!=='') {$addn[] = "o.title LIKE ('$name%')";}
+    if (($pricefrom)!=='') {$addn[] = "o.cost > $pricefrom";}
+    if (($pricebefor)!=='') {$addn[] = "o.cost < $pricebefor";}
+    if (($roomcount)!=='') {$addn[] = "o.`room-count` = $roomcount";}
+    if (($street)!=='') {$addn[] = "s.name = '$street'";}
+    if (($district)!=='') {$addn[] = "d.name = '$district'";}
+    if (($settling)!=='') {$addn[] = "s1.name = '$settling'";}
+    if (($house)!=='') {$addn[] = "o.house = '$house'";}
+    $addn[]='o.sold = 0'    ;
+    $sql = "SELECT * FROM object o JOIN street s ON o.`street-id` = s.id JOIN district d "
+            . "ON o.`district-id` = d.id JOIN settling s1 ON o.`settling-id` = s1.id WHERE ".  implode(' and ', $addn) ." limit ". $page * $limit . ", $limit";
+    $r['sql'] = $sql;
+    //echo $sql;
+    $query = mysqli_query($con, $sql);
+    $r['rez'] = mysqli_fetch_assoc($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r;
+}
+
+function getobjectcount_bysearch($name) {
+    $con = config();
+    $sql = "SELECT COUNT(*) FROM object o where o.sold = 0 and o.title like ('%$name')";
+    $query = mysqli_query($con, $sql);
+    $m = mysqli_fetch_row($query);
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //--------------------------------
+    return $m[0];
+}
+function countitemssearch($name, $pricefrom, $pricebefor, $roomcount, $street, $district, $settling, $house, $page, $limit) {
+    $con = config();    
+    if (($name)!=='') {$addn[] = "o.title LIKE ('$name%')";}
+    if (($pricefrom)!=='') {$addn[] = "o.cost > $pricefrom";}
+    if (($pricebefor)!=='') {$addn[] = "o.cost < $pricebefor";}
+    if (($roomcount)!=='') {$addn[] = "o.`room-count` = $roomcount";}
+    if (($street)!=='') {$addn[] = "s.name = '$street'";}
+    if (($district)!=='') {$addn[] = "d.name = '$district'";}
+    if (($settling)!=='') {$addn[] = "s1.name = '$settling'";}
+    if (($house)!=='') {$addn[] = "o.house = '$house'";}
+    $addn[]='o.sold = 0'    ;
+    $sql = "SELECT count(*) FROM object o JOIN street s ON o.`street-id` = s.id JOIN district d "
+            . "ON o.`district-id` = d.id JOIN settling s1 ON o.`settling-id` = s1.id WHERE ".  implode(' and ', $addn);
+    
+    //echo $sql;
+    $query = mysqli_query($con, $sql);
+    $r = mysqli_fetch_row($query);
+    
+    //--------------------------------
+    if (isset($con)) {
+        mysqli_close($con);
+    }
+    //-------------------------------- 
+    return $r[0];
 }
 ?>
