@@ -21,7 +21,7 @@ $morlinks = '';
 //empty(mysqli_real_escape_string($con, ucfirst(strtolower(trim(filter_input(INPUT_POST, 'srhtxt')))))) == 0
 //Модуль для поиска
 if (isset($_REQUEST['srhbtn'])) {
-    $items[] = 'Нет элементов с такими параметрами';
+    
     $name = mysqli_real_escape_string($con, ucfirst(strtolower(trim(filter_input(INPUT_GET, 'srhtxt')))));
     $street = mysqli_real_escape_string($con, ucfirst(strtolower(trim(filter_input(INPUT_GET, 'street')))));
     $district = mysqli_real_escape_string($con, ucfirst(strtolower(trim(filter_input(INPUT_GET, 'district')))));
@@ -128,5 +128,7 @@ if ($numpages > 1) {
         $links[] = $last;
     }
 }
+if (empty($items)==1){$items[] = 'Нет элементов с такими параметрами';}
+
 include '../templates/goods.tpl';
 ?>    
