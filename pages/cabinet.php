@@ -4,7 +4,7 @@ include_once './functions.php';
 
 $persinf = checklogin();
 
-if ($persinf !== '') {
+if (empty($persinf) == 0) {
 //print_r(get_name($fb));
     $name = $persinf[0]['name'];
     $surname = $persinf[0]['surname'];

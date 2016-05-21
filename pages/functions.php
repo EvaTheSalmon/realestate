@@ -11,7 +11,8 @@ function config() {
         if (!$con) {
             throw new Exception('Не удаётся подключиться к базе');
         } else {
-            mysqli_query($con, "SET NAMES 'utf8'");
+            //mysqli_query($con, "SET NAMES 'utf8'");
+            mysqli_set_charset($con, "utf8");
             return $con;
         }
     } catch (Exception $exc) {

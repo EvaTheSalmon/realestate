@@ -5,7 +5,13 @@
         <title>Недвижимость</title>        
         <link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon">
         <style>           
-            
+            input[type=checkbox] + label {
+                visibility: hidden;                
+            } 
+            input[type=checkbox]:checked + label {
+
+                visibility: visible;
+            }
             html{background-color: #4f4f4f;}
         </style>
     </head>
