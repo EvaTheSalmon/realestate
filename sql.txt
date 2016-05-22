@@ -1,0 +1,233 @@
+SELECT s.number, s.adress, r.region
+  from school s join region r 
+  on r.id = s.region_id 
+-----------------------
+Вкладка: опции
+	включать выражение use (использование базы реальное название) - выкл
+	исключать выражения definer и sql sequrity - вкл
+-----------------------
+select s.`last`, sk.number
+  from student s join student_kurs sk
+  on s.id=sk.student_id
+-----------------------
+SELECT s.`last`, sk.number, k.kurs
+  FROM student s
+  JOIN student_kurs sk
+  ON s.id = sk.student_id 
+  join kurs k on k.id=sk.kurs_id
+-----------------------
+select k.kurs, k.duration
+  from kurs k order by k.kurs DESC - обратно, ASC - прямо
+	limit 3 - ограниченное количество
+-----------------------
+select k.kurs, k.duration
+    from kurs k 
+    where k.duration>80 or k.duration<40 
+-----------------------
+select k.kurs, k.duration
+    from kurs k 
+    where k.kurs='PHP, like - по части слова
+-----------------------
+select s.`last`, sk.kurs_id, sk.`data`
+    from student s join student_kurs sk on sk.student_id = s.id 
+-----------------------
+select s.`last`, sk.kurs_id, sk.`data`
+    from student s join student_kurs sk on sk.student_id = s.id 
+    where s.`last` like '%р%'
+-----------------------
+SELECT s.`last`, k.kurs, k.price
+  from student s join student_kurs sk on s.id=sk.student_id
+  join kurs k on k.id=sk.kurs_id ORDER by s.`last` asc
+-----------------------
+SELECT s.`last`, k.kurs, k.price
+  from student s join student_kurs sk on s.id=sk.student_id
+  join kurs k on k.id=sk.kurs_id where k.price BETWEEN 320 and 500
+
+-----------------------Ребятки
+SELECT p.`first`, p.`last`
+FROM pupil p
+WHERE p.sex 
+
+-----------------------Attention, inverted date
+SELECT t.`first`, t.`last`, YEAR(t.day)
+from teacher t where t.day > '1966.01.01'
+
+-----------------------Like
+SELECT p.`first`, p.`last`
+from pupil p 
+where p.`last` like '%малыш%'
+
+-----------------------same
+SELECT p.`first`, p.`last`
+from pupil p 
+where p.`last` like '%малыш%' and p.sex = 0
+
+-----------------------Имя
+SELECT concat (p.`first`, " ", p.`last`)as 'ИФО'
+from pupil p 
+where p.`first` like 'а%' and p.sex = 1
+
+-----------------------Имена
+SELECT fio.`last`
+FROM
+  (
+  SELECT p.`first`, p.`last`
+  FROM pupil p
+  ORDER BY p.`last` DESC
+  LIMIT 5) 
+AS fio ORDER BY fio.`last` ASC
+
+-----------------------Выбор с пустым полем
+SELECT p.`first`, p.`last`, p.middle
+  FROM  pupil p
+  WHERE  p.middle is null;
+
+-----------------------
+SELECT count(p.last) as 'Всего человек', p.sex as 'Мальчиши-больчиши'
+  from pupil p
+    group by p.sex
+  -- si по одному полю, то агрегируем по другому полю
+-----------------------
+
+  SELECT AVG(pl.marks), p.`first`
+FROM
+   pupil p join pupil_lesson pl 
+  on pl.pupil_id=p.id
+GROUP BY
+  p.`first`
+-----------------------
+SELECT AVG(pl.marks), p.`last`, p.`first`
+  FROM pupil p left join pupil_lesson pl 
+    on p.id=pl.pupil_id
+      GROUP BY p.`last`, p.`first`
+-----------------------
+SELECT sum(pl.marks) / count(pl.marks), l.name
+FROM pupil_lesson pl
+JOIN lesson l
+ON l.id = pl.lesson_id
+GROUP BY l.name
+-----------------------
+SELECT count(pl.marks), l.name
+FROM pupil_lesson pl
+JOIN lesson l
+ON l.id = pl.lesson_id
+GROUP BY l.name
+ORDER BY  count(pl.marks) DESC
+LIMIT 1
+-----------------------
+SELECT count(p.`first`), c.number
+  from class c join class_pupil cp on cp.class_id=c.id
+  join pupil p on p.id=cp.id   
+  GROUP BY cp.class_id
+-----------------------
+SELECT min(tc.duration)
+     , max(tc.duration)
+     , round(avg(tc.duration))
+FROM
+  teacher_class tc
+
+-----------------------
+SELECT asd.mark, asd.fir, asd.las
+  from 
+(
+SELECT avg(pl.marks) AS mark
+     , p.`last` as las
+     , p.`first` as fir
+FROM
+  pupil p
+JOIN pupil_lesson pl
+ON p.id = pl.pupil_id
+GROUP BY
+  p.`first`
+, p.`last`) as asd 
+  where asd.mark > '4.2';
+
+-----------------------
+SELECT p.last, p.first, avg(pl.marks)
+  from pupil_lesson pl right join pupil p
+  on p.id = pl.pupil_id
+  GROUP BY p.`last`, p.`first`
+  having avg(pl.marks)>4.4
+
+----------------------
+SELECT max(t1.k) as maximum, 
+  (select t2.n 
+    from( 
+SELECT count(pl.marks) as k, l.name as n
+from lesson l join pupil_lesson pl
+  on l.id=pl.lesson_id
+  group by l.name) as t2
+  where t2.k=max(t1.k)
+  ) as predmet
+  from(
+SELECT count(pl.marks) AS k
+     , l.name AS n
+FROM
+  lesson l
+JOIN pupil_lesson pl
+ON l.id = pl.lesson_id
+GROUP BY
+  l.name) as t1
+
+------------------------------
+USE school;
+-- можно delete -> CREATE OR REPLACE DEFINER = 'root'@'localhost' /*Warning*/
+  VIEW sample
+AS
+SELECT `c`.`number` AS `number`
+     , `p`.`last` AS `last`
+FROM
+  ((`class` `c`
+JOIN `class_pupil` `cp`
+ON ((`c`.`id` = `cp`.`class_id`)))
+JOIN `pupil` `p`
+ON ((`p`.`id` = `cp`.`pupil_id`)));
+
+-------------------------------
+select *
+  from class c join teacher_class tc on c.id=tc.class_id
+  join lesson l on l.id=tc.lesson_id
+  order by c.number
+
+  select DISTINCt l.name, c.number
+from class c join teacher_class tc on c.id=tc.class_id
+  join teacher t on t.id=tc.teacher_id join teacher_lesson tl 
+    on tl.teacher_id=t.id join lesson l on l.id=tl.lesson_id
+    ORDER BY c.number
+-------------------------------  
+    
+  CREATE FUNCTION f_teacher(a VARCHAR(50))
+    returns INT
+    begin
+      DECLARE num INT;
+        SELECT t.id INTO num 
+          from teacher t 
+            where t.`last`=a;
+       RETURN num;
+      end 
+
+select school.f_teacher('Петров')
+
+-------------------------------  
+CREATE FUNCTION f_count_lesson()
+    returns INT
+begin
+      declare cou int;
+SELECT count(l.name) into cou 
+  from lesson l join teacher_class tc on l.id=tc.lesson_id
+  join class c on tc.class_id=c.id;
+  RETURN cou;
+      end
+------------------------------
+begin
+      declare cou int;
+SELECT count(l.name) into cou 
+  from lesson l join teacher_class tc on l.id=tc.lesson_id
+  join class c on tc.class_id=c.id
+  GROUP BY l.name
+  HAVING l.name = a;
+  RETURN cou;
+      end
+
+SELECT school.f_count_onl_les('английский язык')
+------------------------------
