@@ -2,14 +2,18 @@
 
 include_once './functions.php';
 session_start();
-if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
-    $cook = filter_input(INPUT_COOKIE, 'log');
-    if (islogin($cook) == true) {
-        $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
-        $fb = $mass['pa'];
-        $_SESSION['persinf'] = get_name($fb);
-        $isloggin = 1;
+$isloggin = 0;
+if (empty($_SESSION['persinf']) == 1) {
+    if ((filter_input(INPUT_COOKIE, 'log')) !== '') {
+        $cook = filter_input(INPUT_COOKIE, 'log');
+        if (islogin($cook) == true) {
+            $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
+            $fb = $mass['pa'];
+            $_SESSION['persinf'] = get_name($fb);
+        }
     }
+} else {
+    $isloggin = 1;
 }
 //print_r($_SESSION['bin']);
 $con = config();
@@ -54,14 +58,14 @@ if (issold($number) == 0) {
     //echo $sql;
     $con = config();
     $query = mysqli_query($con, $sql);
-
     $mass = loadreview($inf['number']);
-
+    
     while ($mass = mysqli_fetch_assoc($query)) {
         $reviews[] = $mass['name'] . ' говорит: ' . $mass['text'] . ' (' . $mass['date'] . ')';
     }
-
-    if (empty($mass)) {
+    
+    print_r($mass);
+    if (empty($mass)==1) {
         $reviews[1] = "Отзывов нет";
     }
 
@@ -89,10 +93,10 @@ if (issold($number) == 0) {
             if (( $response != null && $response->success)) {
                 $review_r = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'review'));
                 sendreview($review_r, $persinf['id'], $inf['number']);
-                header('Location: ' . __FILE__ . '?number=' . $number);
+                header('Location: ' . $_SERVER['REQUEST_URI']);
             } else {
-        echo '<script language="javascript">alert("Проверьте капчу");</script>';
-    }
+                echo '<script language="javascript">alert("Проверьте капчу");</script>';
+            }
         }
     } else {
         $loggin = 'Необходимо войти или зарегистрироваться чтобы оставлять отзывы';

@@ -4,18 +4,21 @@
         <meta charset="UTF-8">
         <title>Недвижимость</title>        
         <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
-        <style>  
-            
+        <link rel="stylesheet" type="text/css" href="../css/common.css">
+        <link rel="stylesheet" type="text/css" href="../css/cabinet.css">
+        <style>              
         </style>        
     </head>
     <body>
-        <?php echo $surname; ?>
+        <?php include 'head.html'; ?>
+        <div class="main">
+        <div class="pers"><?php echo $surname.' '.$name; ?></div>        
         <form action="../pages/cabinet.php<?php echo '?'.$_SERVER['QUERY_STRING'] ?>" method="post">
             <p>Количество новостей на страницу</p><input type="number" max="20" min="1" name="number" value="<?php echo $limit_bs ?>"/>
             <input type="submit" name="save" value="Сохранить настройки">
-        </form>
-        <!--Сюда добавить "Предложить дом" -->  
-        <br/>
+        </form>                 
+        <br/><hr/><br/>
+        <p>Предложить дом на продажу</p>
         <form method="post">
             <input name="name" placeholder="Название" type="text" required/>
             <input name="description" placeholder="Описание" type="text" required/>
@@ -30,5 +33,6 @@
             <?php select_types() ?>
             <input name="add" value="Добавить" type="submit"/>
         </form>
+        </div>
     </body>
 </html>

@@ -2,13 +2,16 @@
 
 include_once './functions.php';
 $con = config();
+session_start();
+
 //Подгрузка количества элементов на странице из базы, если есть
-if (isset($_SESSION['persinf'])) {
+if (isset($_SESSION['persinf']) and empty(($_SESSION['persinf']))==0) {
     $info = $_SESSION['persinf'];
     $limit = $info['limit'];
 } else {
     $limit = 5;
 }
+
 //Экранируем нестандартные значения страницы
 (int) $page = filter_input(INPUT_GET, 'page');
 if ($page < 0) {
@@ -65,7 +68,7 @@ if (isset($_REQUEST['srhbtn'])) {
                         </td>
                     </tr>
                     <tr>
-                        <td colspan=\"2\">" . $mass['description'] . "</td>
+                        <td colspan=\"2\" class=\"desc\">" . $mass['description'] . "</td>
                     </tr>";
 
             $items[] = $text;

@@ -1,7 +1,9 @@
 <?php
 
+session_start();
 include_once './functions.php';
 $con = config();
+
 if (empty($_SESSION['persinf']) == 1) {
     if ((filter_input(INPUT_COOKIE, 'log')) !== '') {
         $cook = filter_input(INPUT_COOKIE, 'log');
@@ -14,11 +16,9 @@ if (empty($_SESSION['persinf']) == 1) {
         }
     }
 } else {
-    echo 'Вы уже вошли';
+    $b = 'Вы уже вошли';
 }
-
 if (!isset($_SESSION['persinf'])) {
-
     if (isset($_REQUEST['send'])) {
         echo 'memem';
         $name = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'name'));
@@ -48,13 +48,11 @@ if (!isset($_SESSION['persinf'])) {
         } else {
             echo '<br>Вы ввели неверные данные';
         }
-
         //----------------------------------------------
         //Далее код входа на сайт, сравнение хэша.
         if (isset($fb) and $fb != 'end') {
             $pass = trim(filter_input(INPUT_POST, 'pass'));
             $pass_hash = hash('sha256', $pass);
-
             if ($fb == $pass_hash) {
                 session_start();
                 //Передаём массив с данными в сессию. Массив двумерный             
@@ -67,7 +65,7 @@ if (!isset($_SESSION['persinf'])) {
                 $info['pa'] = $pass_hash;
                 $info['ip'] = hash('sha256', $_SERVER['REMOTE_ADDR']);
                 $value = serialize($info);
-                setcookie('log', $value);
+                setcookie('log', $value, 60*60*24*7);
                 header('location: login.php');
                 //----------------------------------
                 echo '<br>Данные переданы';
@@ -77,7 +75,13 @@ if (!isset($_SESSION['persinf'])) {
         }
     }
 } else {
-    echo 'Вы уже вошли';
+    $b = 'Вы уже вошли';
+}
+if (isset($_REQUEST['quit'])){
+    session_unset();
+    session_destroy();
+    setcookie('log', '', -99);
+    header('location: login.php');
 }
 include '../templates/login.tpl';
 ?>

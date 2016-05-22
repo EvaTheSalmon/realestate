@@ -1,40 +1,16 @@
-<?php
-session_start();
-
-?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>Недвижимость</title>        
         <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
-        <style>
-            html{background-color: #4f4f4f;}
-            .main_conteiner{width: 80%; 
-                            max-width: 1200px;
-                            min-width: 600px;
-                            background-color: red; 
-                            height: 100px; 
-                            margin: auto;
-                            border-style: solid;
-                            border-color: black;
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <style>  
 
-            }
-            header{height: 15%;
-                   max-height: 200px;
-                   min-height: 100px;
-                   align-items: flex-start;
-                   /*background: linear-gradient(to bottom, #228B22, transparent);*/                   
-            }            
         </style>
-    </head>
-<!--    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <script type="text/javascript">
-        window.jQuery || document.write("<script type=\"text/javascript\" src=\"js/jquery-2.2.2.min.js\"><\/script>");
-    </script>-->
-    <body>
-        <!--<header><img src="resources/logo.png" width="120pt" height="120pt"></header>-->
-
+    </head>    
+    <body>        
         <table class="main_conteiner">            
             <tr>
                 <td><div id="panel1"><a href="pages/login.php">Логин</a></div></td>
@@ -42,11 +18,23 @@ session_start();
                 <td><div id="panel3"><a href="pages/cabinet.php">Кабинет</a></div></td>                
                 <td><div id="panel4"><a href="pages/goods.php">Товары</a></div></td>
                 <td><div id="panel4"><a href="pages/order.php">Корзина</a></div></td>
-            </tr>
-            <tr>
-                
-            </tr>
-        </table>        
-        
+            </tr>            
+        </table>    
+
+
+        <div class="main">            
+            <div class="news" style="float:left; margin-right:3px;">
+                <script src="//news.yandex.ru/common.js"></script>
+                <script src="//news.yandex.ru/ru/realty5.utf8.js" charset="utf-8"></script>
+                <script src="js/yandexnews.js.gz"></script>
+            </div>            
+            <hr class="b">
+            <div class="news" style="float:right; margin-left: 3px;">
+                <h4>Новости сайта</h4>
+                <ol>
+                    <li>Релизная версия 1.0 - 22.05.2016</li>
+                </ol>
+            </div>
+        </div>
     </body>
 </html>

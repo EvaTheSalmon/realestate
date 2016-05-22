@@ -1,0 +1,23 @@
+.back{
+    margin-top: 50px;
+    margin-left: 15%; 
+    margin-right: 15%; 
+    min-width: 700px;
+    height: max-content; 
+    background-color:rgba(255,255,255,0.5);
+    border-radius:10px;
+}
+.mappa{height: 150px; 
+       width: 100%; 
+       top: 5px; left: 5px;
+}
+.image{height: 240px; 
+       width: 320px
+}
+.ment{
+    width: 200px; /* Ширина элемента в пикселах */
+    padding: 10px; /* Поля вокруг текста */
+    margin: auto; /* Выравниваем по центру */
+    background-color:rgba(255,255,255,0.5);
+    border-radius:10px;
+}

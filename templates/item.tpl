@@ -4,15 +4,12 @@
         <meta charset="UTF-8">
         <title>Недвижимость</title>        
         <link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon">
-        <style>
-            html{background-color: #4f4f4f;}
-            .back{margin-left: 15%; margin-right: 15%; min-width: 700px; height: max-content; background: red;}
-            .mappa{height: 150px; width: 100%; top: 5px; left: 5px;}
-            .image{height: 240px; width: 320px}
-            .sys_adr{}
-        </style>
+        <link rel="stylesheet" type="text/css" href="../css/common.css">
+        <link rel="stylesheet" type="text/css" href="../css/item.css">
+        <style></style>
     </head>    
     <body>
+        <?php include 'head.html'; ?>
         <input value="<?php echo $address ?>" id="address" class="sys_adr" disabled hidden/>
         <div class="back">
             <table>
@@ -46,7 +43,7 @@
             </table>            
         </div>
         <!-------------------------------------->
-        <script type="text/javascript" src="../js/map.js">
+        <script type="text/javascript" src="../js/map.js.gz">
             initMap();
         </script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKJy5rIOT0ALJP6x7Ks32fm7gMTyDylcE&callback=initMap"></script>

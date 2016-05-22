@@ -3,17 +3,16 @@
 include_once './functions.php';
 session_start();
 if (empty($_SESSION['persinf']) == 0) {
-    if (!isset($_SESSION['bin']) or $_SESSION['bin'] !== NULL) {
-        if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
-            $cook = filter_input(INPUT_COOKIE, 'log');
-            if (islogin($cook) == true) {                
-                $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
-                $fb = $mass['pa'];
-                $_SESSION['persinf'] = get_name($fb);                
-            }
+    if ((filter_input(INPUT_COOKIE, 'log')) !== '') {
+        $cook = filter_input(INPUT_COOKIE, 'log');
+        if (islogin($cook) == true) {
+            $mass = unserialize(filter_input(INPUT_COOKIE, 'log'));
+            $fb = $mass['pa'];
+            $_SESSION['persinf'] = get_name($fb);
         }
-
-        $order = $_SESSION['bin'];
+    }
+    $order = $_SESSION['bin'];
+    if (empty($order) == 0) {
         $i = 0;
         $persinf = $_SESSION['persinf'];
 
@@ -21,7 +20,9 @@ if (empty($_SESSION['persinf']) == 0) {
             $filename = loadimages($value);
             $comil[$i] = selectobject($value);
             //Здесь формируется таблица с краткой информацией о выбранных объектах, начиная с <tr>
-            $mass[] = "<tr><td><img src=\"" . $filename . "\" class=\"image\" alt=\"" . $comil[$i]['title'] . "\"/></td></tr><tr><td>" . $comil[$i]['title'] . "</td></tr><tr><td>" . $comil[$i]['description'] . "</td></tr><tr><td>Купить<input type='checkbox' value=\"$value\" name=\"$value\" checked/></td></tr>";
+            $mass[] = "<tr><td><img src=\"" . $filename . "\" class=\"image\" alt=\"" . $comil[$i]['title'] . "\"/></td></tr><tr><td>" . $comil[$i]['title'] .
+                    "</td></tr><tr><td>" . $comil[$i]['description'] . "</td></tr><tr><td>Купить<input type='checkbox' "
+                    . "value=\"$value\" name=\"$value\" checked/></td></tr>";
             $i++;
         }
 //Обнуление/объявление общей цены и письма
@@ -63,16 +64,17 @@ if (empty($_SESSION['persinf']) == 0) {
                     'Информация по заказу', $mailbody);
             //echo '<script language="javascript">alert("Заказ оформлен. Проверьте почту. Сейчас вы будете перенаправлены");</script>';       
             //sleep(5);
-            //header('Location: goods.php');
+            $bin = array();
+            $_SESSION['bin'] = $bin;
+            header('Location: goods.php');
         }
-    } else {
-        echo '<br>Корзина пуста';
+    }
+    if (empty($mass)) {
+        $b = 'Корзина пуста';
     }
 } else {
     header('Location: login.php');
 }
-
-
 
 
 include '../templates/order.tpl';

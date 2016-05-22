@@ -3,11 +3,12 @@
 function config() {
     try {
         header('Content-Type:text/html; charset=utf-8');
-        $host = 'localhost';
-        $user = 'root';
-        $pass = 'vertrigo';
-        $db = 'realestate';
-        $con = mysqli_connect($host, $user, $pass, $db);
+        $host = 'mysql.hostinger.ru';
+        $user = 'u316863832_oleg';
+        $pass = 'fwPYkpsD8Q';
+        $db = 'u316863832_real';
+        $con = mysqli_connect($host, $user, $pass);        
+        mysqli_select_db($con, $db);        
         if (!$con) {
             throw new Exception('Не удаётся подключиться к базе');
         } else {
@@ -189,16 +190,17 @@ function get_user_emhas($hash) {
 
 function islogin($info) {
     $con = config();
-    if (null !== (filter_input(INPUT_COOKIE, 'log'))) {
+    if (empty(filter_input(INPUT_COOKIE, 'log')) == 1) {
         $info = unserialize(filter_input(INPUT_COOKIE, 'log'));
         $email = mysqli_real_escape_string($con, $info['em']);
         $pass = mysqli_real_escape_string($con, $info['pa']);
         $ip = mysqli_real_escape_string($con, $info['ip']);
         $sql = "SELECT p.email_hash from people p WHERE p.pass_hash = '" . $pass . "'";
+        
         $query = mysqli_query($con, $sql);
         $email_ch = mysqli_fetch_row($query);
         if ($email_ch[0] == $email and $ip == hash('sha256', $_SERVER['REMOTE_ADDR'])) {
-            return TRUE;
+            return true;
         } else {
             return FALSE;
         }
@@ -326,6 +328,7 @@ JOIN settling s ON o.`settling-id` = s.id JOIN street s1 ON o.`street-id` = s1.i
 function savesettings($limit, $id) {
     $con = config();
     $sql = "update people p SET p.`limit` = $limit WHERE p.id = $id";
+    //echo $sql;
     $query = mysqli_query($con, $sql);
     //--------------------------------
     if (isset($con)) {
@@ -510,7 +513,7 @@ function loadaddressfil($i) {
 
 function loadreview($obj) {
     $con = config();
-    $sql = "SELECT p.`name` as 'name', r.`text` as 'text', r.date FROM reviews r JOIN people p ON p.id = r.author WHERE r.object = " . $obj;
+    $sql = "SELECT p.`name` as 'name', r.`text` as 'text', r.date FROM reviews r JOIN people p ON p.id = r.author WHERE r.object = " . $obj;   
     $query = mysqli_query($con, $sql);
     $mass[] = mysqli_fetch_assoc($query);
     //--------------------------------
@@ -685,18 +688,34 @@ function select_types() {
 }
 
 function searchitems($name, $pricefrom, $pricebefor, $roomcount, $street, $district, $settling, $house, $page, $limit) {
-    $con = config();    
-    if (($name)!=='') {$addn[] = "o.title LIKE ('$name%')";}
-    if (($pricefrom)!=='') {$addn[] = "o.cost > $pricefrom";}
-    if (($pricebefor)!=='') {$addn[] = "o.cost < $pricebefor";}
-    if (($roomcount)!=='') {$addn[] = "o.`room-count` = $roomcount";}
-    if (($street)!=='') {$addn[] = "s.name = '$street'";}
-    if (($district)!=='') {$addn[] = "d.name = '$district'";}
-    if (($settling)!=='') {$addn[] = "s1.name = '$settling'";}
-    if (($house)!=='') {$addn[] = "o.house = '$house'";}
-    $addn[]='o.sold = 0'    ;
+    $con = config();
+    if (($name) !== '') {
+        $addn[] = "o.title LIKE ('$name%')";
+    }
+    if (($pricefrom) !== '') {
+        $addn[] = "o.cost > $pricefrom";
+    }
+    if (($pricebefor) !== '') {
+        $addn[] = "o.cost < $pricebefor";
+    }
+    if (($roomcount) !== '') {
+        $addn[] = "o.`room-count` = $roomcount";
+    }
+    if (($street) !== '') {
+        $addn[] = "s.name = '$street'";
+    }
+    if (($district) !== '') {
+        $addn[] = "d.name = '$district'";
+    }
+    if (($settling) !== '') {
+        $addn[] = "s1.name = '$settling'";
+    }
+    if (($house) !== '') {
+        $addn[] = "o.house = '$house'";
+    }
+    $addn[] = 'o.sold = 0';
     $sql = "SELECT * FROM object o JOIN street s ON o.`street-id` = s.id JOIN district d "
-            . "ON o.`district-id` = d.id JOIN settling s1 ON o.`settling-id` = s1.id WHERE ".  implode(' and ', $addn) ." limit ". $page * $limit . ", $limit";
+            . "ON o.`district-id` = d.id JOIN settling s1 ON o.`settling-id` = s1.id WHERE " . implode(' and ', $addn) . " limit " . $page * $limit . ", $limit";
     $r['sql'] = $sql;
     //echo $sql;
     $query = mysqli_query($con, $sql);
@@ -721,24 +740,41 @@ function getobjectcount_bysearch($name) {
     //--------------------------------
     return $m[0];
 }
+
 function countitemssearch($name, $pricefrom, $pricebefor, $roomcount, $street, $district, $settling, $house, $page, $limit) {
-    $con = config();    
-    if (($name)!=='') {$addn[] = "o.title LIKE ('$name%')";}
-    if (($pricefrom)!=='') {$addn[] = "o.cost > $pricefrom";}
-    if (($pricebefor)!=='') {$addn[] = "o.cost < $pricebefor";}
-    if (($roomcount)!=='') {$addn[] = "o.`room-count` = $roomcount";}
-    if (($street)!=='') {$addn[] = "s.name = '$street'";}
-    if (($district)!=='') {$addn[] = "d.name = '$district'";}
-    if (($settling)!=='') {$addn[] = "s1.name = '$settling'";}
-    if (($house)!=='') {$addn[] = "o.house = '$house'";}
-    $addn[]='o.sold = 0'    ;
+    $con = config();
+    if (($name) !== '') {
+        $addn[] = "o.title LIKE ('$name%')";
+    }
+    if (($pricefrom) !== '') {
+        $addn[] = "o.cost > $pricefrom";
+    }
+    if (($pricebefor) !== '') {
+        $addn[] = "o.cost < $pricebefor";
+    }
+    if (($roomcount) !== '') {
+        $addn[] = "o.`room-count` = $roomcount";
+    }
+    if (($street) !== '') {
+        $addn[] = "s.name = '$street'";
+    }
+    if (($district) !== '') {
+        $addn[] = "d.name = '$district'";
+    }
+    if (($settling) !== '') {
+        $addn[] = "s1.name = '$settling'";
+    }
+    if (($house) !== '') {
+        $addn[] = "o.house = '$house'";
+    }
+    $addn[] = 'o.sold = 0';
     $sql = "SELECT count(*) FROM object o JOIN street s ON o.`street-id` = s.id JOIN district d "
-            . "ON o.`district-id` = d.id JOIN settling s1 ON o.`settling-id` = s1.id WHERE ".  implode(' and ', $addn);
-    
+            . "ON o.`district-id` = d.id JOIN settling s1 ON o.`settling-id` = s1.id WHERE " . implode(' and ', $addn);
+
     //echo $sql;
     $query = mysqli_query($con, $sql);
     $r = mysqli_fetch_row($query);
-    
+
     //--------------------------------
     if (isset($con)) {
         mysqli_close($con);
@@ -746,4 +782,5 @@ function countitemssearch($name, $pricefrom, $pricebefor, $roomcount, $street, $
     //-------------------------------- 
     return $r[0];
 }
+
 ?>

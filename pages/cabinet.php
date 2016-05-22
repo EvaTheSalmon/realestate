@@ -18,6 +18,7 @@ if (empty($persinf) == 0) {
     if (isset($_REQUEST['save'])) {
         $limit = $_REQUEST['number'];
         savesettings($limit, $id);
+        $_SESSION['persinf']['limit'] =$limit; 
     }
     $con = config();
     if (isset($_REQUEST['add'])) {

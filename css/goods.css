@@ -1,0 +1,101 @@
+.image {
+    height: 240px; width: 320px;
+}
+.timg{
+    width: 320px;
+}
+.main{
+    margin-top: 500px;
+}
+.links{
+    width: 50%; /* Ширина элемента в пикселах */
+    padding: 10px; /* Поля вокруг текста */
+    margin: auto; /* Выравниваем по центру */ 
+    text-align: center;
+    
+}
+@font-face{
+    font-family: Gabriola;
+    src: local('Gabriola'), url(../resources/Gabriola.svg);
+    src: local('Gabriola'), url(../resources/Gabriola.ttf);
+}
+html{
+    background-color: #4f4f4f;
+    background: url('../resources/d9207c98.png');
+
+}
+a {
+    color:#000;
+    text-decoration:none;
+}
+
+a:visited {
+    color:#000;
+}
+
+a:hover {
+    color:#000;
+    text-decoration:underline;
+}
+input[type=submit] {
+    border:1px solid rgba(0,0,0,0.3);
+    background: #5bdc79; /* Old browsers */
+    background: -moz-linear-gradient(top,  #68e886 0%, #5bdc79 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#68e886), color-stop(100%,#5bdc79)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #68e886 0%, #5bdc79 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #68e886 0%,#5bdc79 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #68e886 0%,#5bdc79 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #68e886 0%, #5bdc79 100%); /* W3C */
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#68e886',endColorstr='#5bdc79',GradientType=0);
+    color:#fff;
+    margin-right:0;
+    margin-top:15px;
+    height: 100px;
+    width: 100px;
+    border-radius:50%;
+    text-shadow:1px 1px 0 rgba(0,0,0,0.3);
+    padding:5px 15px;
+    font: 25px 'Gabriola';
+}
+.main_conteiner{
+    margin-top: -20px;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 10px;
+    width:100%;
+    height:55px;    
+    background-color:rgba(255,255,255,0.5);
+    border-radius:10px;
+    box-shadow:0 0 5px 0 rgba(0,0,0,0.2), inset 0 1px 0 0 rgba(250,250,250,0.5);
+    font: 25px 'Gabriola';
+}
+.capt{
+    text-align: center;
+    font: 40px 'Gabriola';
+}
+.signbl{     
+    padding: 10px;     
+    margin: auto;
+    margin-top: 5%;
+    background: #fc0; 
+    box-shadow:0 0 5px 0 rgba(0,0,0,0.2), inset 0 1px 0 0 rgba(250,250,250,0.5);
+    text-align:center;
+    border:1px solid rgba(0,0,0,0.3);   
+    background-color:rgba(255,255,255,0.5);
+    border-radius:20px;    
+}
+.s {
+    width:48%;
+    text-align: center;
+}
+.b {
+    width:1px;
+    height:80px;
+    display:inline-block;
+    background-color:#000;
+}
+input{
+    margin: 5px;
+    padding: 3px;
+    width: 150px;
+}

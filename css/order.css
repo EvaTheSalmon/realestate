@@ -1,0 +1,9 @@
+.image{
+    height: 100px; 
+    width: 120px;
+}
+.main{
+    max-width: 100%; 
+    margin: auto;
+    margin-top: 50px;
+}
